@@ -20,7 +20,9 @@
   - zod
   - utils (currentTimeStamp util)
   - redirectWith<>
-  - File Upload -> Server side -> fileTypeFromBlob validation + imgcropper
+  - Functional components (with prop spreading classname functionality)
+  - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
+  - Dropdown (CSS)
   - Check conforms {...get<>Props()} utils about accessibility coverage
   - Example usage (loader, action, default)
 - simple file storage + backup + imgproxy?
