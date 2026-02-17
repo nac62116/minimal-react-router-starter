@@ -1,0 +1,40 @@
+- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting
+- Prisma
+- Security Header
+- nonce
+- allowIndexing
+- Simple auth:
+  - v1 only login + db management
+  - vx:
+  - create user gui?
+  - reset password?
+  - SSO?
+  - Register?
+  - ...
+- eslint, prettier?
+- Server and Client side .env
+- CSRF and Honeypot
+- invariant<>
+- i18n
+- Conform:
+  - zod
+  - utils (currentTimeStamp util)
+  - redirectWith<>
+  - File Upload -> Server side -> fileTypeFromBlob validation + imgcropper
+  - Check conforms {...get<>Props()} utils about accessibility coverage
+  - Example usage (loader, action, default)
+- simple file storage + backup + imgproxy?
+- Nodemailer, SMTP, Handlebars, Mailhog (dev)
+- Server side error handle (entry.server) + simple logging with log rotation and htop visualized
+- Prefetching
+- useTheme with theme cookie (see web-auth or epic-stack)
+- Matomo (Client)
+- Matomo (Server):
+  - v1: GDPR compliant
+  - v2: Event tracking
+- Server:
+  - Check hard and software
+  - ...
+- Video streaming
+- RTE and sanitize user html when neccessary
+- Testing?
