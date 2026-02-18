@@ -12,7 +12,7 @@
   - Register?
   - ...
 - eslint, prettier?
-- Server and Client side .env
+- Server and Client side .env -> NODE_VERSION (docker + .nvmrc)
 - CSRF and Honeypot
 - invariant<>
 - i18n
