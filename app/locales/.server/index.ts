@@ -53,7 +53,7 @@ const ar = {
 } as const;
 
 export const languageModuleMap = {
-  ar,
   de,
   en,
+  ar,
 } as const;
