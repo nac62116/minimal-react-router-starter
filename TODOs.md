@@ -1,8 +1,9 @@
+- Fonts from cp
+- Server and Client side .env -> NODE_VERSION (docker + .nvmrc) + TODO: see through
 - Security Header
 - nonce
 - allowIndexing
 - CSRF and Honeypot
-- Server and Client side .env -> NODE_VERSION (docker + .nvmrc) + TODO: see through
 - Docker compose with nginx deployment + acme challenge (SSL) + rate limiting
 - Prisma
 - Simple auth:
