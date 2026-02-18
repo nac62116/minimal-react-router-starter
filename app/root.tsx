@@ -6,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   type HeadersArgs,
   type LoaderFunctionArgs,
   type MetaFunction,
@@ -18,6 +19,7 @@ import { getAlert } from "./alert.server";
 import { getToast } from "./toast.server";
 import { languageModuleMap } from "./locales/.server";
 import { detectLanguage, localeCookie } from "./i18n.server";
+import { DEFAULT_LANGUAGE } from "./i18n.shared";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -90,6 +92,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
       alert,
       toast,
       locales,
+      language,
     },
     {
       headers: combinedHeaders,
@@ -98,8 +101,11 @@ export const loader = async (args: LoaderFunctionArgs) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  // if there was an error running the loader, data could be missing
+  const data = useLoaderData<typeof loader | null>();
+
   return (
-    <html lang="en">
+    <html lang={data?.language || DEFAULT_LANGUAGE}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
