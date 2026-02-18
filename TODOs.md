@@ -1,11 +1,11 @@
-- Fonts from cp
 - Server and Client side .env -> NODE_VERSION (docker + .nvmrc) + TODO: see through
 - Security Header
 - nonce
 - allowIndexing
 - CSRF and Honeypot
-- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting
-- Prisma
+- Matomo (Client)
+- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting + docker compose load balancer
+- simple file storage + backup + imgproxy? + image/video streaming?
 - Simple auth:
   - v1 only login + db management
   - vx:
@@ -19,21 +19,19 @@
   - utils (useEffect for state sync + submission.reply() with toast and alert)
   - Functional components (with prop spreading classname functionality)
     - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
+    - i18n toggle (Optimistic UI + set client side cookie) ->
+    - theme toggle (Optimistic UI + set client side cookie + setLanguage via Provider) -> Inspiration useTheme (see web-auth or epic-stack)
     - Dropdown (CSS)
+    - RTE when neccessary
   - Check conforms {...get<>Props()} utils about accessibility coverage
   - Example usage (loader, action, default)
-- simple file storage + backup + imgproxy? + image/video streaming?
 - Nodemailer, SMTP, Handlebars, Mailhog (dev)
-- Server side error handle (entry.server) + simple logging with log rotation and htop visualized
-- useTheme with theme cookie (see web-auth or epic-stack)
-- Matomo (Client)
 - Matomo (Server):
   - v1: GDPR compliant
   - v2: Event tracking
 - Server:
   - Check hard and software
   - ...
-- RTE when neccessary
 - Testing?
 
 Done:
@@ -44,3 +42,4 @@ Done:
 - redirectWithToast/Alert
 - sanitize user html
 - Prefetching
+- Fonts from cp
