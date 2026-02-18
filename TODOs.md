@@ -1,8 +1,10 @@
-- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting
-- Prisma
 - Security Header
 - nonce
 - allowIndexing
+- CSRF and Honeypot
+- Server and Client side .env -> NODE_VERSION (docker + .nvmrc) + TODO: see through
+- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting
+- Prisma
 - Simple auth:
   - v1 only login + db management
   - vx:
@@ -11,24 +13,17 @@
   - SSO?
   - Register?
   - ...
-- eslint, prettier?
-- Server and Client side .env -> NODE_VERSION (docker + .nvmrc)
-- CSRF and Honeypot
-- invariant<>
-- i18n
 - Conform:
   - zod
-  - utils (currentTimeStamp util)
-  - redirectWith<>
+  - utils (useEffect for state sync + submission.reply() with toast and alert)
   - Functional components (with prop spreading classname functionality)
-  - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
-  - Dropdown (CSS)
+    - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
+    - Dropdown (CSS)
   - Check conforms {...get<>Props()} utils about accessibility coverage
   - Example usage (loader, action, default)
-- simple file storage + backup + imgproxy?
+- simple file storage + backup + imgproxy? + image/video streaming?
 - Nodemailer, SMTP, Handlebars, Mailhog (dev)
 - Server side error handle (entry.server) + simple logging with log rotation and htop visualized
-- Prefetching
 - useTheme with theme cookie (see web-auth or epic-stack)
 - Matomo (Client)
 - Matomo (Server):
@@ -37,6 +32,14 @@
 - Server:
   - Check hard and software
   - ...
-- Video streaming
-- RTE and sanitize user html when neccessary
+- RTE when neccessary
 - Testing?
+
+Done:
+
+- eslint, prettier
+- invariant<>
+- i18n
+- redirectWithToast/Alert
+- sanitize user html
+- Prefetching
