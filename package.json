@@ -37,5 +37,8 @@
     "/node_modules",
     "/build",
     "/public/build"
-  ]
+  ],
+  "lint-staged": {
+    "*.{js,css,md,ts,tsx,json}": "prettier --write"
+  }
 }
