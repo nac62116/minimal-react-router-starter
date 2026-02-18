@@ -35,8 +35,7 @@
   },
   "eslintIgnore": [
     "/node_modules",
-    "/build",
-    "/public/build"
+    "/build"
   ],
   "lint-staged": {
     "*.{js,css,md,ts,tsx,json}": "prettier --write"
