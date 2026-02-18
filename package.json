@@ -6,6 +6,8 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
+    "docker:build": "docker build -t minimal-react-router-starter-image .",
+    "docker:start": "docker run -p 3000:3000 --name minimal-react-router-starter minimal-react-router-starter-image",
     "typecheck": "react-router typegen && tsc",
     "lint": "eslint ."
   },
