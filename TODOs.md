@@ -32,6 +32,8 @@
 - Server:
   - Check hard and software
   - ...
+- CMS (Buildtime mutations via src file changes and github PRs (behind UI))
+- Prisma (Runtime mutations)
 - Testing?
 
 Done:
