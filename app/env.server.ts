@@ -1,0 +1,58 @@
+import { z } from "zod";
+
+// Typesafe environment variables on the server and public ones on the client. See entry.server.ts and root.ts for implementation.
+// Usage:
+// - Server: process.env.<ENV_VARIABLE>
+// - Client: window.ENV.<ENV_VARIABLE> or ENV.<ENV_VARIABLE>
+
+const schema = z.object({
+  NODE_ENV: z.enum(["production", "development", "test"] as const),
+  BASE_URL: z.string(),
+  SESSION_SECRET: z.string(),
+  ALLOW_INDEXING: z.enum(["true", "false"] as const),
+});
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv extends z.infer<typeof schema> {}
+  }
+}
+
+export function init() {
+  const parsed = schema.safeParse(process.env);
+
+  if (parsed.success === false) {
+    console.error(
+      "❌ Invalid environment variables:",
+      z.treeifyError(parsed.error)
+    );
+
+    throw new Error("Invalid environment variables");
+  }
+}
+
+/**
+ * This is used in both `entry.server.ts` and `root.tsx` to ensure that
+ * the environment variables are set and globally available before the app is
+ * started.
+ *
+ * NOTE: Do *not* add any environment variables in here that you do not wish to
+ * be included in the client.
+ * @returns all public ENV variables
+ */
+export function getEnv() {
+  return {
+    MODE: process.env.NODE_ENV,
+    BASE_URL: process.env.BASE_URL,
+    ALLOW_INDEXING: process.env.ALLOW_INDEXING,
+  };
+}
+
+type ENV = ReturnType<typeof getEnv>;
+
+declare global {
+  var ENV: ENV;
+  interface Window {
+    ENV: ENV;
+  }
+}

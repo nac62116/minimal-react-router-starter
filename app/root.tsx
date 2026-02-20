@@ -20,6 +20,8 @@ import { getToast } from "./toast.server";
 import { languageModuleMap } from "./locales/.server";
 import { detectLanguage, localeCookie } from "./i18n.server";
 import { DEFAULT_LANGUAGE } from "./i18n.shared";
+import { getEnv } from "./env.server";
+import { useNonce } from "./nonce-provider";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -62,6 +64,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
   };
   const locales = languageModuleMap[language].root;
 
+  // Set alert and toast flash cookies to get a one time message on navigation.
   const { alert, headers: alertHeaders } = await getAlert(request);
   const { toast, headers: toastHeaders } = await getToast(request);
 
@@ -87,12 +90,16 @@ export const loader = async (args: LoaderFunctionArgs) => {
     combinedHeaders.set("Cache-Control", "private, max-age=10");
   }
 
+  // Public environment variables that you want to be available on the client. Details in env.server.ts and entry.server.ts.
+  const ENV = getEnv();
+
   return data(
     {
+      language,
+      locales,
       alert,
       toast,
-      locales,
-      language,
+      ENV,
     },
     {
       headers: combinedHeaders,
@@ -104,18 +111,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // if there was an error running the loader, data could be missing
   const data = useLoaderData<typeof loader | null>();
 
+  // nonce for CSP
+  const nonce = useNonce();
+
+  // Allow indexing (bots to crawl our website), which is important for SEO, but sometimes you may want to disable in development or test environments. See env.server.ts for details.
+  const allowIndexing = data?.ENV.ALLOW_INDEXING === "true";
+
   return (
     <html lang={data?.language || DEFAULT_LANGUAGE}>
       <head>
+        <Meta />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
+        {allowIndexing ? null : (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
+        <Links nonce={nonce} />
       </head>
       <body className="font-sans bg-white dark:bg-gray-950 text-neutral-600 dark:text-neutral-300">
         {children}
-        <ScrollRestoration />
-        <Scripts />
+        {data !== null ? (
+          <script
+            nonce={nonce}
+            dangerouslySetInnerHTML={{
+              __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+            }}
+          />
+        ) : null}
+        <ScrollRestoration nonce={nonce} />
+        <Scripts nonce={nonce} />
       </body>
     </html>
   );

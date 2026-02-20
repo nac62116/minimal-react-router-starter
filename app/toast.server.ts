@@ -31,11 +31,7 @@ const TOAST_SESSION_STORAGE = createCookieSessionStorage({
     sameSite: "lax",
     path: "/",
     httpOnly: true,
-    // TODO: Use environment variable for the secrets, when env.server.ts and ENV is ready
-    secrets: ["s1mpl3s3cr3t3n0ugh4d3v"],
-    // process.env.NODE_ENV === "production"
-    //   ? process.env.SESSION_SECRET.split(",")
-    //   : ["secret"],
+    secrets: process.env.SESSION_SECRET.split(","),
     secure: process.env.NODE_ENV === "production",
   },
 });
