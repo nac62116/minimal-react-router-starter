@@ -1,10 +1,6 @@
-- Server and Client side .env -> NODE_VERSION (docker + .nvmrc) + TODO: see through
-- Security Header
-- nonce
-- allowIndexing
 - CSRF and Honeypot
 - Matomo (Client)
-- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting + docker compose load balancer
+- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting + slice ending slashes (see epic stack server/index.ts line 44) + top level security header + docker compose load balancer
 - simple file storage + backup + imgproxy? + image/video streaming?
 - Simple auth:
   - v1 only login + db management
@@ -45,3 +41,8 @@ Done:
 - sanitize user html
 - Prefetching
 - Fonts from cp
+- Server and Client side .env -> NODE_VERSION (docker + .nvmrc) + TODO: see through
+- Security Header
+- nonce
+- allowIndexing
+- splat route
