@@ -20,7 +20,7 @@
     - Dropdown (CSS)
     - RTE when neccessary
   - Check conforms {...get<>Props()} utils about accessibility coverage
-  - Example usage (loader, action, default)
+  - Example usage (loader, action -> add csrf and honeypot, default)
 - Nodemailer, SMTP, Handlebars, Mailhog (dev)
 - Matomo (Server):
   - v1: GDPR compliant
