@@ -7,8 +7,8 @@ import { z } from "zod";
 
 const schema = z.object({
   NODE_ENV: z.enum(["production", "development", "test"] as const),
-  BASE_URL: z.string(),
-  SESSION_SECRET: z.string(),
+  BASE_URL: z.string().min(1),
+  SESSION_SECRET: z.string().min(1),
   ALLOW_INDEXING: z.enum(["true", "false"] as const),
 });
 
