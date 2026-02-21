@@ -9,10 +9,11 @@
     "docker:build": "docker build -t minimal-react-router-starter-image .",
     "docker:start": "docker run -p 3000:3000 --name minimal-react-router-starter minimal-react-router-starter-image",
     "docker:stop": "docker stop minimal-react-router-starter && docker rm minimal-react-router-starter",
-    "typecheck": "react-router typegen && tsc",
-    "lint": "eslint ."
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "@react-router/node": "7.12.0",
     "@react-router/serve": "7.12.0",
     "isbot": "^5.1.31",
@@ -24,25 +25,15 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@epic-web/config": "^1.24.0",
     "@react-router/dev": "7.12.0",
     "@tailwindcss/vite": "^4.1.13",
-    "@types/eslint": "^9.6.1",
     "@types/node": "^22",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/sanitize-html": "^2.16.0",
-    "eslint": "^9.39.2",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4"
-  },
-  "eslintIgnore": [
-    "/node_modules",
-    "/build"
-  ],
-  "lint-staged": {
-    "*.{js,css,md,ts,tsx,json}": "prettier --write"
   }
 }
