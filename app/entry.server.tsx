@@ -14,7 +14,7 @@ import {
 import { getEnv, init as initEnv } from "./env.server";
 import { randomBytes } from "node:crypto";
 import { createCSPHeaderOptions } from "./headers.server";
-import { NonceProvider } from "./nonce-provider";
+import { NonceProvider } from "./nonce-provider.shared";
 
 // Typesafe environment variables on the server and public ones on the client (See env.server.ts and root.tsx for details and usage)
 initEnv();
@@ -27,7 +27,6 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadContext: AppLoadContext
   // If you have middleware enabled:
   // loadContext: RouterContextProvider
