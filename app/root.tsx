@@ -22,6 +22,10 @@ import { detectLanguage, localeCookie } from "./i18n.server";
 import { DEFAULT_LANGUAGE } from "./i18n.shared";
 import { getEnv } from "./env.server";
 import { useNonce } from "./nonce-provider";
+import { csrf } from "./csrf.server";
+import { honeypot } from "./honeypot.server";
+import { HoneypotProvider } from "remix-utils/honeypot/react";
+import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -58,23 +62,31 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 
 export const loader = async (args: LoaderFunctionArgs) => {
   const { request } = args;
+
+  // CSRF and honeypot (see csrf.server.ts and honeypot.server.ts)
+  const [csrfToken, csrfCookie] = await csrf.commitToken(request);
+  const honeyProps = await honeypot.getInputProps();
+
+  // Language and locales (see i18n.server.ts, i18n.shared.ts, locales/.server/index.ts and the locales/.server/<lng> folders)
   const language = await detectLanguage(request);
   const languageCookieHeaders = {
     "Set-Cookie": await localeCookie.serialize(language),
   };
   const locales = languageModuleMap[language].root;
 
-  // Set alert and toast flash cookies to get a one time message on navigation.
+  // Set alert and toast flash cookies to get a one time message on navigation. (see alert.server.ts and toast.server.ts)
   const { alert, headers: alertHeaders } = await getAlert(request);
   const { toast, headers: toastHeaders } = await getToast(request);
 
+  // Combining all response headers to set them later in one go
+  const responseHeaders = combineHeaders(
+    csrfCookie ? { "set-cookie": csrfCookie } : null,
+    languageCookieHeaders,
+    alertHeaders,
+    toastHeaders
+  );
   // Make prefetching work with a short lived cache header only on requests that have a prefetch purpose
   // see https://sergiodxa.com/tutorials/fix-double-data-request-when-prefetching-in-remix
-  const combinedHeaders = combineHeaders(
-    alertHeaders,
-    toastHeaders,
-    languageCookieHeaders
-  );
   const isGet = request.method.toLowerCase() === "get";
   const purpose =
     request.headers.get("Purpose") ||
@@ -85,16 +97,18 @@ export const loader = async (args: LoaderFunctionArgs) => {
   const isPrefetch = purpose === "prefetch";
 
   // If it's a GET request and it's a prefetch request and it doesn't have a Cache-Control header
-  if (isGet && isPrefetch && !combinedHeaders.has("Cache-Control")) {
+  if (isGet && isPrefetch && !responseHeaders.has("Cache-Control")) {
     // we will cache for 10 seconds only on the browser
-    combinedHeaders.set("Cache-Control", "private, max-age=10");
+    responseHeaders.set("Cache-Control", "private, max-age=10");
   }
 
-  // Public environment variables that you want to be available on the client. Details in env.server.ts and entry.server.ts.
+  // Public environment variables that you want to be available on the client (see env.server.ts and entry.server.ts)
   const ENV = getEnv();
 
   return data(
     {
+      csrfToken,
+      honeyProps,
       language,
       locales,
       alert,
@@ -102,7 +116,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
       ENV,
     },
     {
-      headers: combinedHeaders,
+      headers: responseHeaders,
     }
   );
 };
@@ -146,7 +160,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const data = useLoaderData<typeof loader>();
+
+  return (
+    <HoneypotProvider {...data.honeyProps}>
+      <AuthenticityTokenProvider token={data.csrfToken}>
+        <Outlet />
+      </AuthenticityTokenProvider>
+    </HoneypotProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

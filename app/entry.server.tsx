@@ -16,7 +16,7 @@ import { randomBytes } from "node:crypto";
 import { createCSPHeaderOptions } from "./headers.server";
 import { NonceProvider } from "./nonce-provider";
 
-// Typesafe environment variables on the server and public ones on the client. See env.server.ts and root.ts for details.
+// Typesafe environment variables on the server and public ones on the client (See env.server.ts and root.tsx for details and usage)
 initEnv();
 global.ENV = getEnv();
 
