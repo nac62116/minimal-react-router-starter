@@ -1,5 +1,3 @@
-- CSRF and Honeypot
-- Matomo (Client)
 - Docker compose with nginx deployment + acme challenge (SSL) + rate limiting + slice ending slashes (see epic stack server/index.ts line 44) + top level security header + docker compose load balancer
 - simple file storage + backup + imgproxy? + image/video streaming?
 - Simple auth:
@@ -46,3 +44,5 @@ Done:
 - nonce
 - allowIndexing
 - splat route
+- CSRF and Honeypot
+- Matomo (Client)
