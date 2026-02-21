@@ -1,7 +1,7 @@
 import { createCookieSessionStorage, redirect } from "react-router";
-import { combineHeaders } from "./utils/.server/headers";
-import { sanitizeUserHtml } from "./utils/.server/sanitize";
+import { sanitizeUserHtml } from "./sanitize.server";
 import { ZodError, z } from "zod";
+import { combineHeaders } from "./headers.server";
 
 type ToastLevel = "neutral" | "positive" | "attention" | "negative";
 
@@ -31,7 +31,7 @@ const TOAST_SESSION_STORAGE = createCookieSessionStorage({
     sameSite: "lax",
     path: "/",
     httpOnly: true,
-    secrets: process.env.SESSION_SECRET.split(","),
+    secrets: process.env.TOAST_SECRETS,
     secure: process.env.NODE_ENV === "production",
   },
 });

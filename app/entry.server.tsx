@@ -11,12 +11,12 @@ import {
   type RenderToPipeableStreamOptions,
   renderToPipeableStream,
 } from "react-dom/server";
-import { getEnv, init as initEnv } from "./env.server";
+import { getEnv, init as initEnv } from "./lib/utils/env.server";
 import { randomBytes } from "node:crypto";
-import { createCSPHeaderOptions } from "./headers.server";
-import { NonceProvider } from "./nonce-provider.shared";
+import { createCSPHeaderOptions } from "./lib/utils/headers.server";
+import { NonceProvider } from "./lib/security/nonce-provider.shared";
 
-// Typesafe environment variables on the server and public ones on the client (See env.server.ts and root.tsx for details and usage)
+// Typesafe environment variables on the server and public ones on the client (See lib/utils/env.server.ts and root.tsx for details and usage)
 initEnv();
 global.ENV = getEnv();
 

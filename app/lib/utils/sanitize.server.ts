@@ -1,5 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 
+// Extend if neccessary but be aware with user input you allow!
+
 const allowedTags = [
   "b",
   "i",

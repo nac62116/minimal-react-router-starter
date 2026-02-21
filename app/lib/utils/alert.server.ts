@@ -1,7 +1,7 @@
 import { createCookieSessionStorage, redirect } from "react-router";
-import { sanitizeUserHtml } from "./utils/.server/sanitize";
+import { sanitizeUserHtml } from "./sanitize.server";
 import { z, ZodError } from "zod";
-import { combineHeaders } from "./utils/.server/headers";
+import { combineHeaders } from "./headers.server";
 
 type AlertLevel = "neutral" | "positive" | "attention" | "negative";
 
@@ -32,7 +32,7 @@ const alertSessionStorage = createCookieSessionStorage({
     sameSite: "lax",
     path: "/",
     httpOnly: true,
-    secrets: process.env.SESSION_SECRET.split(","),
+    secrets: process.env.ALERT_SECRETS,
     secure: process.env.NODE_ENV === "production",
   },
 });

@@ -8,10 +8,29 @@ import { z } from "zod";
 const schema = z.object({
   NODE_ENV: z.enum(["production", "development", "test"] as const),
   BASE_URL: z.string().min(1),
-  SESSION_SECRET: z.string().min(1),
   ALLOW_INDEXING: z.enum(["true", "false"] as const),
   MATOMO_URL: z.string().min(1).optional(),
   MATOMO_SITE_ID: z.string().min(1).optional(),
+  SESSION_SECRETS: z
+    .string()
+    .min(1)
+    .transform((val) => val.split(",")),
+  HONEYPOT_SECRETS: z
+    .string()
+    .min(1)
+    .transform((val) => val.split(",")),
+  CSRF_SECRETS: z
+    .string()
+    .min(1)
+    .transform((val) => val.split(",")),
+  TOAST_SECRETS: z
+    .string()
+    .min(1)
+    .transform((val) => val.split(",")),
+  ALERT_SECRETS: z
+    .string()
+    .min(1)
+    .transform((val) => val.split(",")),
 });
 
 declare global {

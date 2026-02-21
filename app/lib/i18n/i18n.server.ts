@@ -6,8 +6,8 @@ import {
   SUPPORTED_COOKIE_LANGUAGES,
   LANGUAGE_COOKIE_MAX_AGE,
 } from "./i18n.shared";
-import { type ArrayElement } from "./utils/.server/types";
-import { invariantResponse } from "./utils/.server/response";
+import { type ArrayElement } from "../utils/types.server";
+import { invariantResponse } from "../utils/error.server";
 
 const supportedHeaderLanguages = [
   "de",

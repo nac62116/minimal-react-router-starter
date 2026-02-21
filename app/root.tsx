@@ -15,19 +15,20 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { combineHeaders } from "./utils/.server/headers";
-import { getAlert } from "./alert.server";
-import { getToast } from "./toast.server";
-import { languageModuleMap } from "./locales/.server";
-import { detectLanguage, localeCookie } from "./i18n.server";
-import { DEFAULT_LANGUAGE } from "./i18n.shared";
-import { getEnv } from "./env.server";
-import { useNonce } from "./nonce-provider.shared";
-import { csrf } from "./csrf.server";
-import { honeypot } from "./honeypot.server";
+import { getAlert } from "./lib/utils/alert.server";
+import { getToast } from "./lib/utils/toast.server";
+import { languageModuleMap } from "./lib/i18n/locales/.server";
+import { detectLanguage, localeCookie } from "./lib/i18n/i18n.server";
+import { DEFAULT_LANGUAGE } from "./lib/i18n/i18n.shared";
+import { getEnv } from "./lib/utils/env.server";
+import { useNonce } from "./lib/security/nonce-provider.shared";
+import { csrf } from "./lib/security/csrf.server";
+import { honeypot } from "./lib/security/honeypot.server";
 import { HoneypotProvider } from "remix-utils/honeypot/react";
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
-import { useMatomo, useMatomoPageView } from "./matomo.shared";
+import { useMatomo, useMatomoPageView } from "./lib/analytics/matomo.shared";
+import { combineHeaders } from "./lib/utils/headers.server";
+import { handlePrefetch } from "./lib/utils/prefetch.server";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -43,17 +44,15 @@ export const meta: MetaFunction<typeof loader> = (/*args*/) => {
     {
       name: "image",
       property: "og:image",
-      // TODO: Use BASE_URL environment variable to construct the full URL for the image, when env.server.ts and ENV is ready
-      content: "http://localhost:3000/images/example-image.jpg",
+      content: `${ENV.BASE_URL}/images/example-image.jpg`,
     },
     {
       property: "og:image:secure_url",
-      // TODO: Use BASE_URL environment variable to construct the full URL for the image, when env.server.ts and ENV is ready
-      content: "https://localhost:3000/images/example-image.jpg",
+      content: `${ENV.BASE_URL}/images/example-image.jpg`,
     },
     {
       property: "og:url",
-      content: "http://localhost:3000/",
+      content: ENV.BASE_URL,
     },
   ];
 };
@@ -65,44 +64,31 @@ export const headers = ({ loaderHeaders }: HeadersArgs) => {
 export const loader = async (args: LoaderFunctionArgs) => {
   const { request } = args;
 
-  // CSRF and honeypot (see csrf.server.ts and honeypot.server.ts)
+  // CSRF and honeypot (see lib/security/csrf.server.ts and lib/security/honeypot.server.ts)
   const [csrfToken, csrfCookie] = await csrf.commitToken(request);
   const honeyProps = await honeypot.getInputProps();
 
-  // Language and locales (see i18n.server.ts, i18n.shared.ts, locales/.server/index.ts and the locales/.server/<lng> folders)
+  // Language and locales (see lib/i18n/i18n.server.ts, lib/i18n/i18n.shared.ts, lib/i18n/locales/.server/index.ts and the lib/i18n/locales/.server/<lng> folders)
   const language = await detectLanguage(request);
   const languageCookieHeaders = {
     "Set-Cookie": await localeCookie.serialize(language),
   };
   const locales = languageModuleMap[language].root;
 
-  // Set alert and toast flash cookies to get a one time message on navigation. (see alert.server.ts and toast.server.ts)
+  // Set alert and toast flash cookies to get a one time message on navigation. (see lib/utils/alert.server.ts and lib/utils/toast.server.ts)
   const { alert, headers: alertHeaders } = await getAlert(request);
   const { toast, headers: toastHeaders } = await getToast(request);
 
-  // Combining all response headers to set them later in one go
-  const responseHeaders = combineHeaders(
+  // Combining all response headers to set them later in one go (see lib/utils/headers.server.ts)
+  const combinedHeaders = combineHeaders(
     csrfCookie ? { "set-cookie": csrfCookie } : null,
     languageCookieHeaders,
     alertHeaders,
     toastHeaders
   );
-  // Make prefetching work with a short lived cache header only on requests that have a prefetch purpose
-  // see https://sergiodxa.com/tutorials/fix-double-data-request-when-prefetching-in-remix
-  const isGet = request.method.toLowerCase() === "get";
-  const purpose =
-    request.headers.get("Purpose") ||
-    request.headers.get("X-Purpose") ||
-    request.headers.get("Sec-Purpose") ||
-    request.headers.get("Sec-Fetch-Purpose") ||
-    request.headers.get("Moz-Purpose");
-  const isPrefetch = purpose === "prefetch";
 
-  // If it's a GET request and it's a prefetch request and it doesn't have a Cache-Control header
-  if (isGet && isPrefetch && !responseHeaders.has("Cache-Control")) {
-    // we will cache for 10 seconds only on the browser
-    responseHeaders.set("Cache-Control", "private, max-age=10");
-  }
+  // Handle prefetch requests (see lib/utils/prefetch.server.ts) -> The function wont override existing Cache-Control headers
+  const responseHeaders = handlePrefetch(request, combinedHeaders);
 
   // Public environment variables that you want to be available on the client (see env.server.ts and entry.server.ts)
   const ENV = getEnv();
@@ -151,12 +137,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={data?.language || DEFAULT_LANGUAGE}>
       <head>
-        <Meta />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {allowIndexing ? null : (
           <meta name="robots" content="noindex, nofollow" />
         )}
+        <Meta />
         <Links nonce={nonce} />
       </head>
       <body className="font-sans bg-white dark:bg-gray-950 text-neutral-600 dark:text-neutral-300">
@@ -194,11 +180,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    message = error.status.toString();
+    details = error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
