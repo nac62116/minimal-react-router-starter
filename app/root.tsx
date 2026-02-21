@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
   type HeadersArgs,
   type LoaderFunctionArgs,
   type MetaFunction,
@@ -21,11 +22,12 @@ import { languageModuleMap } from "./locales/.server";
 import { detectLanguage, localeCookie } from "./i18n.server";
 import { DEFAULT_LANGUAGE } from "./i18n.shared";
 import { getEnv } from "./env.server";
-import { useNonce } from "./nonce-provider";
+import { useNonce } from "./nonce-provider.shared";
 import { csrf } from "./csrf.server";
 import { honeypot } from "./honeypot.server";
 import { HoneypotProvider } from "remix-utils/honeypot/react";
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
+import { useMatomo, useMatomoPageView } from "./matomo.shared";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -125,11 +127,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // if there was an error running the loader, data could be missing
   const data = useLoaderData<typeof loader | null>();
 
+  // The current location
+  const location = useLocation();
+
   // nonce for CSP
   const nonce = useNonce();
 
   // Allow indexing (bots to crawl our website), which is important for SEO, but sometimes you may want to disable in development or test environments. See env.server.ts for details.
   const allowIndexing = data?.ENV.ALLOW_INDEXING === "true";
+
+  // Matomo analytics
+  useMatomo({
+    url: data?.ENV.MATOMO_URL,
+    siteId: data?.ENV.MATOMO_SITE_ID,
+    nonce,
+  });
+  useMatomoPageView({
+    url: data?.ENV.MATOMO_URL,
+    siteId: data?.ENV.MATOMO_SITE_ID,
+    location,
+  });
 
   return (
     <html lang={data?.language || DEFAULT_LANGUAGE}>

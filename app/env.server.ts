@@ -10,6 +10,8 @@ const schema = z.object({
   BASE_URL: z.string().min(1),
   SESSION_SECRET: z.string().min(1),
   ALLOW_INDEXING: z.enum(["true", "false"] as const),
+  MATOMO_URL: z.string().min(1).optional(),
+  MATOMO_SITE_ID: z.string().min(1).optional(),
 });
 
 declare global {
@@ -45,6 +47,8 @@ export function getEnv() {
     MODE: process.env.NODE_ENV,
     BASE_URL: process.env.BASE_URL,
     ALLOW_INDEXING: process.env.ALLOW_INDEXING,
+    MATOMO_URL: process.env.MATOMO_URL,
+    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
   };
 }
 

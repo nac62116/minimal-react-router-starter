@@ -43,11 +43,19 @@ export default function handleRequest(
   if (process.env.NODE_ENV === "development") {
     styleSrc.push("'unsafe-inline'");
   }
+  const scriptSrc = ["'self'"];
+  if (
+    typeof process.env.MATOMO_URL === "string" &&
+    typeof process.env.MATOMO_SITE_ID === "string"
+  ) {
+    scriptSrc.push(process.env.MATOMO_URL.replace(/https?:\/\//, ""));
+  }
+  scriptSrc.push(`'nonce-${nonce}'`);
   const cspHeaderOptions = createCSPHeaderOptions({
     "default-src": "'self'",
     "style-src": styleSrc.join(" "),
     "style-src-elem": styleSrc.join(" "),
-    "script-src": `'self' 'nonce-${nonce}'`,
+    "script-src": scriptSrc.join(" "),
     "worker-src": "blob:",
     "object-src": "'none'",
     "form-action": "'self'",

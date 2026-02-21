@@ -4,4 +4,5 @@ export default [
   index("routes/home.tsx"),
   route("*", "./routes/$.tsx"),
   route("csp-reports", "./routes/csp-reports.tsx"),
+  route("error", "./routes/error.tsx"),
 ] satisfies RouteConfig;
