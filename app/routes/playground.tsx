@@ -23,16 +23,40 @@ export const loader = async (args: Route.LoaderArgs) => {
 export default function Playground() {
   const { language, locales } = useLoaderData<typeof loader>();
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold mb-4">Example components</h1>
-      <h2 className="text-xl font-semibold mb-2">Language Switch</h2>
-      <LanguageSwitch currentLanguage={language} />
-      <p className="my-2">{locales.exampleLocale.title}</p>
-      <p className="my-2">{locales.exampleLocale.description}</p>
-      <h2 className="text-xl font-semibold mt-4 mb-2">
-        Progressive enhanced Dropdown
-      </h2>
-      <Dropdown />
+    <div className="flex flex-col gap-6 p-8">
+      <h1 className="text-3xl font-semibold">Example components</h1>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">Language Switch</h2>
+        <div className="flex flex-col gap-1">
+          <LanguageSwitch currentLanguage={language} />
+          <p>{locales.exampleLocale.title}</p>
+          <p>{locales.exampleLocale.description}</p>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">
+          Progressive enhanced Dropdown
+        </h2>
+        <Dropdown />
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">
+          Responsive Menu (f.e. Overlay on mobile, inline on desktop)
+        </h2>
+        <p>TODO</p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">
+          Form with redirect message (Stay on this page after success)
+        </h2>
+        <p>TODO</p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">
+          Form with redirect message (Redirect to different page after success)
+        </h2>
+        <p>TODO</p>
+      </div>
     </div>
   );
 }
