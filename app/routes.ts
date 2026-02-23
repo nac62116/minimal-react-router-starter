@@ -5,5 +5,7 @@ export default [
   route("*", "./routes/$.tsx"),
   route("csp-reports", "./routes/csp-reports.tsx"),
   route("error", "./routes/error.tsx"),
-  route("/robots.txt", "./routes/robots.txt.tsx"),
+  route("robots.txt", "./routes/robots.txt.tsx"),
+  // Playground
+  route("playground", "./routes/playground.tsx"),
 ] satisfies RouteConfig;

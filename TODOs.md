@@ -10,7 +10,7 @@
   - ...
 - Conform:
   - zod
-  - utils (useEffect for state sync + submission.reply() with toast and alert)
+  - utils (useEffect for state sync + submission.reply() with message)
   - Functional components (with prop spreading classname functionality)
     - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
     - i18n toggle (Optimistic UI + set client side cookie) ->

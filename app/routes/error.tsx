@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs } from "react-router";
+import type { Route } from "./+types/error";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
   const error = formData.get("error");
   // TODO: parse with zod and log when logging service is ready
