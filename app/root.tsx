@@ -15,8 +15,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { getAlert } from "./lib/utils/alert.server";
-import { getToast } from "./lib/utils/toast.server";
+import { getMessage } from "./lib/utils/message.server";
 import { languageModuleMap } from "./lib/i18n/locales/.server";
 import { detectLanguage, localeCookie } from "./lib/i18n/i18n.server";
 import { DEFAULT_LANGUAGE } from "./lib/i18n/i18n.shared";
@@ -75,16 +74,14 @@ export const loader = async (args: LoaderFunctionArgs) => {
   };
   const locales = languageModuleMap[language].root;
 
-  // Set alert and toast flash cookies to get a one time message on navigation. (see lib/utils/alert.server.ts and lib/utils/toast.server.ts)
-  const { alert, headers: alertHeaders } = await getAlert(request);
-  const { toast, headers: toastHeaders } = await getToast(request);
+  // Set message flash cookies to get a one time message on navigation. (see lib/utils/message.server.ts)
+  const { message, headers: messageHeaders } = await getMessage(request);
 
   // Combining all response headers to set them later in one go (see lib/utils/headers.server.ts)
   const combinedHeaders = combineHeaders(
     csrfCookie ? { "set-cookie": csrfCookie } : null,
     languageCookieHeaders,
-    alertHeaders,
-    toastHeaders
+    messageHeaders
   );
 
   // Handle prefetch requests (see lib/utils/prefetch.server.ts) -> The function wont override existing Cache-Control headers
@@ -99,8 +96,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
       honeyProps,
       language,
       locales,
-      alert,
-      toast,
+      message,
       ENV,
     },
     {

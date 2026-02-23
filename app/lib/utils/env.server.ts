@@ -23,11 +23,7 @@ const schema = z.object({
     .string()
     .min(1)
     .transform((val) => val.split(",")),
-  TOAST_SECRETS: z
-    .string()
-    .min(1)
-    .transform((val) => val.split(",")),
-  ALERT_SECRETS: z
+  MESSAGE_SECRETS: z
     .string()
     .min(1)
     .transform((val) => val.split(",")),
