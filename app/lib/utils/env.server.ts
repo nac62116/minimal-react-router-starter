@@ -40,8 +40,10 @@ export function init() {
 
   if (parsed.success === false) {
     console.error(
-      "❌ Invalid environment variables:",
-      z.treeifyError(parsed.error)
+      "❌ Invalid environment variables:\n",
+      parsed.error.issues
+        .map((issue) => `- ${issue.path.join(".")}: ${issue.message}`)
+        .join("\n")
     );
 
     throw new Error("Invalid environment variables");

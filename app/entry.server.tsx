@@ -1,5 +1,5 @@
+import "dotenv/config";
 import { PassThrough } from "node:stream";
-
 import {
   type AppLoadContext,
   type EntryContext,
