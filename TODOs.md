@@ -13,9 +13,7 @@
   - utils (useEffect for state sync + submission.reply() with message)
   - Functional components (with prop spreading classname functionality)
     - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
-    - i18n toggle (Optimistic UI + set client side cookie) ->
-    - theme toggle (Optimistic UI + set client side cookie + setLanguage via Provider) -> Inspiration useTheme (see web-auth or epic-stack)
-    - Dropdown (CSS)
+    - theme toggle (Optimistic UI + set client side cookie + setTheme via Provider) -> First look at inspiration useTheme (see web-auth or epic-stack)
     - RTE when neccessary
   - Check conforms {...get<>Props()} utils about accessibility coverage
   - Example usage (loader, action -> add csrf and honeypot, default)

@@ -21,6 +21,7 @@ export function Dropdown() {
           setIsOpen(!isOpen);
         }}
         preventScrollReset
+        className="hover:underline font-semibold"
       >
         {isOpen ? "Close dropdown" : "Open dropdown"}
       </Link>
