@@ -1,5 +1,5 @@
 import { getServerEnv } from "~/lib/utils/env.server";
-import type { Route } from "./+types/robots.txt";
+import type { Route } from "./+types/robots";
 
 export const loader = async (args: Route.LoaderArgs) => {
   if (getServerEnv().ALLOW_INDEXING === false) {
