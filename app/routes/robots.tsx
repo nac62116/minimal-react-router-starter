@@ -1,7 +1,8 @@
+import { getServerEnv } from "~/lib/utils/env.server";
 import type { Route } from "./+types/robots.txt";
 
 export const loader = async (args: Route.LoaderArgs) => {
-  if (process.env.ALLOW_INDEXING === "false") {
+  if (getServerEnv().ALLOW_INDEXING === false) {
     return new Response("User-agent: *\nDisallow: /", {
       status: 200,
       headers: {

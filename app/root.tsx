@@ -116,7 +116,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const nonce = useNonce();
 
   // Allow indexing (bots to crawl our website), which is important for SEO, but sometimes you may want to disable in development or test environments. See env.server.ts for details.
-  const allowIndexing = data?.ENV.ALLOW_INDEXING === "true";
+  const allowIndexing = data === null ? true : data.ENV.ALLOW_INDEXING;
 
   // Matomo analytics
   useMatomo({

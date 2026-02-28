@@ -1,12 +1,13 @@
 import { Honeypot, SpamError } from "remix-utils/honeypot/server";
+import { getServerEnv } from "../utils/env.server";
 
 // ### Honeypot
 // Simple bots that try to post our actions will fill each input in a form automatically. Thats where the honeypot comes in. It adds a hidden input to your forms and checks on the server if it was filled out. If it was filled out, you know that it was a bot that submitted the form and you can reject the request. You can also use a honeypot field that is visible but has a name that makes it unlikely for bots to fill it out, like "email2" or "phone2". The honeypot field is encrypted with the encryptionSeed and decrypted on the server to prevent bots from easily bypassing it by checking the HTML of the form.
 // You have to call checkHoneypot() in every action function in your app and include the <HoneypotInputs /> (remix-utils) in your html forms. TODO: Point to form action example when it's ready.
 
 export const honeypot = new Honeypot({
-  validFromFieldName: process.env.TESTING ? null : undefined,
-  encryptionSeed: process.env.HONEYPOT_SECRETS[0],
+  // validFromFieldName: getServerEnv().TESTING ? null : undefined,
+  encryptionSeed: getServerEnv().HONEYPOT_SECRETS[0],
 });
 
 export function checkHoneypot(formData: FormData) {

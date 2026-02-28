@@ -1,5 +1,6 @@
 import { createCookie } from "react-router";
 import { CSRF, CSRFError } from "remix-utils/csrf/server";
+import { getServerEnv } from "../utils/env.server";
 
 // ### CSRF Protection
 // CSRF attacks transform a users post request into a get request, which is not protected by the SameSite cookie attribute. If the get endpoint is mutating data, which you should never do, then this can lead to data manipulation by attackers.
@@ -8,9 +9,9 @@ import { CSRF, CSRFError } from "remix-utils/csrf/server";
 const cookie = createCookie("csrf", {
   path: "/",
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: getServerEnv().NODE_ENV === "production",
   sameSite: "lax",
-  secrets: process.env.CSRF_SECRETS,
+  secrets: getServerEnv().CSRF_SECRETS,
 });
 
 export const csrf = new CSRF({ cookie });

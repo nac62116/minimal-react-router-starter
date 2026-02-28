@@ -4,12 +4,13 @@ import type { Route } from "./+types/_landing-page";
 import { LanguageSwitch } from "~/lib/i18n/LanguageSwitch";
 import { detectLanguage } from "~/lib/i18n/i18n.server";
 import { languageModuleMap } from "~/lib/i18n/locales/.server";
+import { getServerEnv } from "~/lib/utils/env.server";
 
 // This is a playground route to show of concepts and test stuff
 
 export const loader = async (args: Route.LoaderArgs) => {
   const { request } = args;
-  if (process.env.NODE_ENV === "production") {
+  if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }
   const language = await detectLanguage(request);

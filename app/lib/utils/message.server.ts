@@ -3,6 +3,7 @@ import { sanitizeUserHtml } from "./sanitize.server";
 import { ZodError, z } from "zod";
 import { combineHeaders } from "./headers.server";
 import type { ArrayElement } from "./types.server";
+import { getServerEnv } from "./env.server";
 
 const MESSAGE_LEVELS = [
   "positive",
@@ -35,8 +36,8 @@ const MESSAGE_SESSION_STORAGE = createCookieSessionStorage({
     sameSite: "lax",
     path: "/",
     httpOnly: true,
-    secrets: process.env.MESSAGE_SECRETS,
-    secure: process.env.NODE_ENV === "production",
+    secrets: getServerEnv().MESSAGE_SECRETS,
+    secure: getServerEnv().NODE_ENV === "production",
   },
 });
 
@@ -47,7 +48,7 @@ export async function redirectWithMessage(
     init?: ResponseInit;
   }
 ) {
-  const baseUrl = process.env.BASE_URL;
+  const baseUrl = getServerEnv().BASE_URL;
   let finalUrl;
   if (url.startsWith(baseUrl)) {
     finalUrl = new URL(url);

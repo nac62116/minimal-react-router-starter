@@ -1,0 +1,30 @@
+name: Platform Stage
+
+on:
+  # Enable this when the app is deployed
+  #push:
+  #branches: [main]
+  # allow trigger manually
+  workflow_dispatch:
+
+jobs:
+  login-and-run-commands:
+    name: Build and start on remote
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGE_HOST }}
+          username: ${{ secrets.STAGE_USERNAME }}
+          passphrase: ${{ secrets.STAGE_PASSPHRASE }}
+          key: ${{ secrets.STAGE_KEY }}
+          port: ${{ secrets.STAGE_PORT }}
+          script: |
+            cd react-router-starter
+            git fetch --all
+            git checkout main
+            git reset --hard origin/main
+            git clean -fd
+            docker compose build --no-cache
+            docker compose up -d

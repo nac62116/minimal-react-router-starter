@@ -5,3 +5,7 @@
 # React Router
 /.react-router/
 /build/
+
+# nginx
+/nginx/dev-certs/
+/nginx/certbot-files-for-dev/

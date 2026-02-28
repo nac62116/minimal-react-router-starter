@@ -1,0 +1,28 @@
+name: Platform Prod
+
+on:
+  # allow trigger manually
+  workflow_dispatch:
+
+jobs:
+  login-and-run-commands:
+    name: Build and start on remote
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          passphrase: ${{ secrets.PROD_PASSPHRASE }}
+          key: ${{ secrets.PROD_KEY }}
+          port: ${{ secrets.PROD_PORT }}
+          script_stop: true
+          script: |
+            cd react-router-starter
+            git fetch --all
+            git checkout main
+            git reset --hard origin/main
+            git clean -fd
+            docker compose build --no-cache
+            docker compose up -d

@@ -11,7 +11,7 @@ import {
   type RenderToPipeableStreamOptions,
   renderToPipeableStream,
 } from "react-dom/server";
-import { getEnv, init as initEnv } from "./lib/utils/env.server";
+import { getEnv, getServerEnv, init as initEnv } from "./lib/utils/env.server";
 import { randomBytes } from "node:crypto";
 import { createCSPHeaderOptions } from "./lib/utils/headers.server";
 import { NonceProvider } from "./lib/security/nonce-provider.shared";
@@ -37,18 +37,17 @@ export default function handleRequest(
   // Security Header
   responseHeaders.set(
     "Reporting-Endpoints",
-    `csp-endpoint='${process.env.BASE_URL}/csp-reports'`
+    `csp-endpoint='${getServerEnv().BASE_URL}/csp-reports'`
   );
   const styleSrc = ["'self'"];
-  if (process.env.NODE_ENV === "development") {
+  if (getServerEnv().NODE_ENV === "development") {
     styleSrc.push("'unsafe-inline'");
   }
   const scriptSrc = ["'self'"];
-  if (
-    typeof process.env.MATOMO_URL === "string" &&
-    typeof process.env.MATOMO_SITE_ID === "string"
-  ) {
-    scriptSrc.push(process.env.MATOMO_URL.replace(/https?:\/\//, ""));
+  const matomoUrl = getServerEnv().MATOMO_URL;
+  const matomoSiteId = getServerEnv().MATOMO_SITE_ID;
+  if (typeof matomoUrl === "string" && typeof matomoSiteId === "string") {
+    scriptSrc.push(matomoUrl.replace(/https?:\/\//, ""));
   }
   scriptSrc.push(`'nonce-${nonce}'`);
   const cspHeaderOptions = createCSPHeaderOptions({
@@ -61,9 +60,9 @@ export default function handleRequest(
     "form-action": "'self'",
     "base-uri": "'none'",
     "frame-ancestors": "'none'",
-    "report-uri": `${process.env.BASE_URL}/csp-reports`,
+    "report-uri": `${getServerEnv().BASE_URL}/csp-reports`,
     "report-to": "csp-endpoint",
-    "upgrade-insecure-requests": process.env.NODE_ENV === "production",
+    "upgrade-insecure-requests": getServerEnv().NODE_ENV === "production",
   });
   responseHeaders.set("Content-Security-Policy", cspHeaderOptions);
   responseHeaders.set("X-Frame-Options", "DENY");

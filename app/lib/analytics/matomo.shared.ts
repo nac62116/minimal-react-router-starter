@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useFetcher, type useLocation } from "react-router";
 
+// See Matomo client docs: https://developer.matomo.org/guides/tracking-javascript-guide
+
 export function useMatomo(options: {
   url?: string;
   siteId?: string;
@@ -12,6 +14,7 @@ export function useMatomo(options: {
 
   useEffect(() => {
     if (document.querySelector(`script[src="${url}matomo.js"]`)) return;
+    console.log(siteId);
     if (typeof siteId === "string" && typeof url === "string") {
       try {
         const _paq = (window._paq = window._paq || []);

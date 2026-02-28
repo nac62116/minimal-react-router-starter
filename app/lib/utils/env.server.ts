@@ -8,9 +8,37 @@ import { z } from "zod";
 const schema = z.object({
   NODE_ENV: z.enum(["production", "development", "test"] as const),
   BASE_URL: z.string().min(1),
-  ALLOW_INDEXING: z.enum(["true", "false"] as const),
-  MATOMO_URL: z.string().min(1).optional(),
-  MATOMO_SITE_ID: z.string().min(1).optional(),
+  DOMAIN: z.string().min(1),
+  SYSTEM_MAIL_SENDER: z.string().min(1),
+  MAILER_HOST: z.string().min(1),
+  MAILER_PORT: z
+    .string()
+    .min(1)
+    .transform((val) => parseInt(val, 10)),
+  MAILER_USER: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  MAILER_PASS: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  ALLOW_INDEXING: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (typeof val === "undefined") return true;
+      if (val === "") return true;
+      return val === "true";
+    }),
+  MATOMO_URL: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  MATOMO_SITE_ID: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
   SESSION_SECRETS: z
     .string()
     .min(1)
@@ -35,6 +63,8 @@ declare global {
   }
 }
 
+let env: z.infer<typeof schema>;
+
 export function init() {
   const parsed = schema.safeParse(process.env);
 
@@ -48,6 +78,16 @@ export function init() {
 
     throw new Error("Invalid environment variables");
   }
+  env = parsed.data;
+}
+
+export function getServerEnv() {
+  if (!env) {
+    throw new Error(
+      "Environment variables not initialized. Call init() first."
+    );
+  }
+  return env;
 }
 
 /**
@@ -61,11 +101,11 @@ export function init() {
  */
 export function getEnv() {
   return {
-    MODE: process.env.NODE_ENV,
-    BASE_URL: process.env.BASE_URL,
-    ALLOW_INDEXING: process.env.ALLOW_INDEXING,
-    MATOMO_URL: process.env.MATOMO_URL,
-    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
+    MODE: getServerEnv().NODE_ENV,
+    BASE_URL: getServerEnv().BASE_URL,
+    ALLOW_INDEXING: getServerEnv().ALLOW_INDEXING,
+    MATOMO_URL: getServerEnv().MATOMO_URL,
+    MATOMO_SITE_ID: getServerEnv().MATOMO_SITE_ID,
   };
 }
 

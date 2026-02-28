@@ -1,4 +1,5 @@
-- Docker compose with nginx deployment + acme challenge (SSL) + rate limiting + slice ending slashes (see epic stack server/index.ts line 44) + top level security header + docker compose load balancer
+- Test: Nodemailer, Handlebars, Mailpit (dev)
+- Reenable eslint
 - simple file storage + backup + imgproxy? + image/video streaming?
 - Simple auth:
   - v1 only login + db management
@@ -17,20 +18,20 @@
     - RTE when neccessary
   - Check conforms {...get<>Props()} utils about accessibility coverage
   - Example usage (loader, action -> add csrf and honeypot, default)
-- Nodemailer, SMTP, Handlebars, Mailhog (dev)
-- Matomo (Server):
+- Matomo (Server -> Docker?):
   - v1: GDPR compliant
   - v2: Event tracking
 - Server:
   - Check hard and software
+  - Test E-Mail over SMTP
   - ...
 - CMS (Buildtime mutations via src file changes and github PRs (behind UI))
 - Prisma (Runtime mutations)
-- Testing?
+- Testing -> Include in Github workflow
 
 Done:
 
-- eslint, prettier
+- prettier
 - invariant<>
 - i18n
 - redirectWithToast/Alert
@@ -44,3 +45,5 @@ Done:
 - splat route
 - CSRF and Honeypot
 - Matomo (Client)
+- Docker compose with nginx deployment + SSL with certbot + Makefile + rate limiting + top level security header
+- Github workflow

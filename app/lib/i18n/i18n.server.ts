@@ -8,6 +8,7 @@ import {
 } from "./i18n.shared";
 import { type ArrayElement } from "../utils/types.server";
 import { invariantResponse } from "../utils/error.server";
+import { getServerEnv } from "../utils/env.server";
 
 const supportedHeaderLanguages = [
   "de",
@@ -52,7 +53,7 @@ const supportedHeaderLanguages = [
 export const localeCookie = createCookie(LANGUAGE_COOKIE_NAME, {
   path: "/",
   sameSite: "lax",
-  secure: process.env.NODE_ENV === "production",
+  secure: getServerEnv().NODE_ENV === "production",
   httpOnly: true,
   // 1 year
   maxAge: LANGUAGE_COOKIE_MAX_AGE,
