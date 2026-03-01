@@ -1,3 +1,4 @@
+- husky pre push
 - Static assets with nice components (loading, blur behaviour) (image and video)
 - Reenable eslint
 - Conform:
