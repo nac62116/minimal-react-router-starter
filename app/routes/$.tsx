@@ -1,4 +1,3 @@
-import { getCompiledMailTemplate, mailer } from "~/lib/mails/mailer.server";
 import type { Route } from "./+types/$";
 
 export const loader = async (args: Route.LoaderArgs) => {
