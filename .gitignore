@@ -8,3 +8,4 @@
 
 # nginx
 /nginx/dev/ssl/
+/nginx/default.conf

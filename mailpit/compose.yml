@@ -1,4 +1,3 @@
-version: "3"
 name: "dev-mailpit"
 
 services:
@@ -8,3 +7,11 @@ services:
     ports:
       - 8025:8025   # Web UI
       - 1025:1025   # SMTP
+    expose:
+      - 1025
+    networks:
+      - react-router-starter-network
+
+networks:
+  react-router-starter-network:
+    external: true

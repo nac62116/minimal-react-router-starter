@@ -9,12 +9,21 @@ const schema = z
   .object({
     NODE_ENV: z.enum(["production", "development", "test"] as const),
     BASE_URL: z.string().optional(),
-    SYSTEM_MAIL_SENDER: z.string().min(1),
-    MAILER_HOST: z.string().min(1),
+    SYSTEM_MAIL_SENDER: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    MAILER_HOST: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
     MAILER_PORT: z
       .string()
-      .min(1)
-      .transform((val) => parseInt(val, 10)),
+      .optional()
+      .transform((val) => {
+        if (typeof val === "undefined" || val === "") return undefined;
+        return parseInt(val, 10);
+      }),
     MAILER_USER: z
       .string()
       .optional()
@@ -57,14 +66,29 @@ const schema = z
       .transform((val) => val.split(",")),
   })
   .transform((env) => {
+    let transformed = { ...env };
     if (typeof env.BASE_URL === "undefined" || env.BASE_URL === "") {
       if (env.NODE_ENV === "production") {
-        env.BASE_URL = "https://localhost";
+        transformed.BASE_URL = "https://localhost";
       } else {
-        env.BASE_URL = "http://localhost:3000";
+        transformed.BASE_URL = "http://localhost:3000";
       }
     }
-    return env;
+    if (typeof env.MAILER_HOST !== "undefined") {
+      if (
+        env.NODE_ENV === "production" &&
+        (env.MAILER_HOST === "localhost" || env.MAILER_HOST === "127.0.0.1")
+      ) {
+        console.warn(
+          "You are trying to reference your SMTP server via localhost, which is not working inside a docker container. Consider adding your SMTP server to the docker compose service network and referencing it by the service name instead of localhost. If this warning was produced whilke testing docker deployment locally, you can safely ignore it."
+        );
+        transformed.MAILER_HOST = "mailpit";
+      }
+      if (env.NODE_ENV === "development" && env.MAILER_HOST === "mailpit") {
+        transformed.MAILER_HOST = "localhost";
+      }
+    }
+    return transformed;
   });
 
 declare global {

@@ -20,6 +20,15 @@ export async function mailer(
   text: Mail.Options["text"],
   html: Mail.Options["html"]
 ) {
+  if (
+    typeof MAILER_OPTIONS.host === "undefined" ||
+    typeof MAILER_OPTIONS.port === "undefined"
+  ) {
+    console.warn(
+      "Mailer host or port is not defined. Skipping sending email. Please set MAILER_HOST and MAILER_PORT env variables to enable email sending."
+    );
+    return;
+  }
   const transporter = createTransport(
     typeof getServerEnv().MAILER_USER === "undefined" ||
       typeof getServerEnv().MAILER_PASS === "undefined"

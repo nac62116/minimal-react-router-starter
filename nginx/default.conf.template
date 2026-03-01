@@ -24,7 +24,7 @@ server {
 	# Limit uploads to 6MB
 	client_max_body_size 6M;
 
-	server_name localhost;
+	server_name ${DOMAIN};
 
 	# Hide nginx version
 	server_tokens off;
@@ -51,11 +51,11 @@ server {
 		proxy_pass http://react-router-service:3000;
 	}
 
-	# Self signed SSL Cert for Dev (-> See Makefile for setup)
-	ssl_certificate /etc/nginx/dev/ssl/certs/fullchain.pem;
-	ssl_certificate_key /etc/nginx/dev/ssl/certs/privkey.pem;
-	ssl_dhparam /etc/nginx/dev/ssl/certs/ssl-dhparams.pem;
-	include /etc/nginx/dev/ssl/certbot-files/options-ssl-nginx.conf;
+	# SSL (Certbot -> See Makefile for setup)
+	ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+	include /etc/letsencrypt/options-ssl-nginx.conf;
 
 	# Ports
 	listen [::]:443 ssl ipv6only=on; # managed by Certbot
@@ -67,7 +67,7 @@ server {
 server {
 	listen 80;
 	listen [::]:80;
-	server_name localhost;
+	server_name ${DOMAIN};
 	# Hide nginx version
   server_tokens off;
 

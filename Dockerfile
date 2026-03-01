@@ -1,14 +1,16 @@
-FROM node:24.14.0 AS development-dependencies-env
+ARG NODE_VERSION=24.14.0
+
+FROM node:${NODE_VERSION} AS development-dependencies-env
 COPY . /app
 WORKDIR /app
 RUN npm ci
 
-FROM node:24.14.0 AS production-dependencies-env
+FROM node:${NODE_VERSION} AS production-dependencies-env
 COPY ./package.json package-lock.json /app/
 WORKDIR /app
 RUN npm ci --omit=dev
 
-FROM node:24.14.0 AS build-env
+FROM node:${NODE_VERSION} AS build-env
 ARG APP_NAME
 ARG BASE_URL
 ARG SYSTEM_MAIL_SENDER
@@ -28,7 +30,7 @@ COPY --from=development-dependencies-env /app/node_modules /app/node_modules
 WORKDIR /app
 RUN npm run build
 
-FROM node:24.14.0
+FROM node:${NODE_VERSION}
 COPY ./package.json package-lock.json /app/
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
 COPY --from=build-env /app/build /app/build

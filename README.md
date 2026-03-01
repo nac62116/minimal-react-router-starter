@@ -1,87 +1,52 @@
-# Welcome to React Router!
+# React Router Starter
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## Install required packages
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+- You need to install Docker on Ubuntu (https://docs.docker.com/engine/install/ubuntu/) or Docker Desktop (https://www.docker.com/products/docker-desktop/)
+- Other dependencies are auto installed with the `make setup-project-<dev|prod>` commands explained below. These are:
+  - openssl via apt or homebrew (Only dev)
+  - curl via apt or homebrew (Only dev)
+  - nvm via their install script (Only dev) -> https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh
+  - certbot via atp (Only prod)
+  - python3-certbot-nginx via atp (Only prod)
 
-## Features
+## Setup dev
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- Create a .env file in the base directory using .env.example. It is already setup for dev development.
+  - `cp ./.env.example ./.env`
+- Run the setup-project-dev-on-mac or setup-project-dev-on-linux command via make
+  - `make setup-project-dev-on-mac` or `make setup-project-dev-on-linux`
 
-## Getting Started
+## Start dev
 
-### Installation
+- React Router dev server with HMR and more:
+  - `nvm use`
+  - `npm run dev`
+  - App reachable through http://localhots:3000
+- Docker dev for testing production deployment:
+  - `npm run docker:build`
+  - `npm run docker:start`
+  - App reachable via self signed cert on https://localhost
+- Remember to rebuild for changes to take effect
+- Dev Mailer (Mailpit) is automatically started and reachable on http://localhost:8025
 
-Install the dependencies:
+## Setup prod
 
-```bash
-npm install
-```
+- Create a .env file in the base directory using .env.example. Changes are needed for prod.
+  - `cp ./.env.example ./.env`
+- Edit .env file
+  - Change the BASE_URL (f.e. https://sub.domain.tld)
+  - Change the SSL_DOCKER_MOUNT to `"/etc/letsencrypt:/etc/letsencrypt:ro"`
+  - Add an email for CERTBOT_UPDATES_RECEIVER which will inform you about renewal
+  - Change the DOMAIN (f.e. sub.domain.tld)
+  - Change SYSTEM_MAIL_SENDER, MAILER_HOST, MAILER_PORT, MAILER_USER, MAILER_PASS to fit your actual smtp host or leave it blank if not used (optional)
+  - Add matomo via MATOMO_URL and MATOMO_SITE_ID if you want (optional)
+  - Generate and add your \_SECRETS
+- Run the setup-project-prod command via make
+  - `make setup-project-prod`
 
-### Development
+## Start prod
 
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- `docker compose build --no-cache`
+- `docker compose up -d`
+- Remember to rebuild for changes to take effect

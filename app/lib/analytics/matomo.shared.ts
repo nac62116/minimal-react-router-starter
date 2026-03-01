@@ -14,7 +14,6 @@ export function useMatomo(options: {
 
   useEffect(() => {
     if (document.querySelector(`script[src="${url}matomo.js"]`)) return;
-    console.log(siteId);
     if (typeof siteId === "string" && typeof url === "string") {
       try {
         const _paq = (window._paq = window._paq || []);
