@@ -1,6 +1,6 @@
-- husky pre push
-- Static assets with nice components (loading, blur behaviour) (image and video)
 - Reenable eslint
+- Logging -> logrotate docker logs -> visualize docker logs
+- Static assets with nice components (loading, blur behaviour) (image and video)
 - Conform:
   - zod
   - utils (useEffect for state sync + submission.reply() with message)
@@ -56,3 +56,4 @@ Done:
 - Test: Nodemailer, Handlebars, Mailpit (dev)
 - Docker compose enhancement -> Single compose.yml and default.conf.template
 - Docs v1 and easy make setup-project
+- husky pre push

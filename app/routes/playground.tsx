@@ -24,7 +24,7 @@ export const loader = async (args: Route.LoaderArgs) => {
   };
 };
 
-export const action = async (args: Route.ActionArgs) => {
+export const action = async () => {
   if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }
