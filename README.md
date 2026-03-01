@@ -44,6 +44,7 @@
   - Generate and add your \_SECRETS
 - Run the setup-project-prod command via make
   - `make setup-project-prod`
+- Setup github workflow (create deploy key, create appleboy key, setup github secrets) -> TODO: document and automate
 
 ## Start prod
 
