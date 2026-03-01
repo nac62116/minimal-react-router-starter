@@ -7,5 +7,4 @@
 /build/
 
 # nginx
-/nginx/dev-certs/
-/nginx/certbot-files-for-dev/
+/nginx/dev/ssl/

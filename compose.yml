@@ -10,7 +10,6 @@ services:
       args:
         APP_NAME: ${APP_NAME}
         BASE_URL: ${BASE_URL}
-        DOMAIN: ${DOMAIN}
         SYSTEM_MAIL_SENDER: ${SYSTEM_MAIL_SENDER}
         MAILER_HOST: ${MAILER_HOST}
         MAILER_PORT: ${MAILER_PORT}
@@ -24,7 +23,7 @@ services:
         CSRF_SECRETS: ${CSRF_SECRETS}
         MESSAGE_SECRETS: ${MESSAGE_SECRETS}
     expose:
-      - "3000"
+      - 3000
     env_file:
       - .env
     healthcheck:
@@ -41,12 +40,12 @@ services:
     container_name: ${DOCKER_APP_NAME:-react-router-starter}-nginx
     restart: unless-stopped
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/http-connection-upgrade-map.conf:/etc/nginx/conf.d/http-connection-upgrade-map.conf:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ${NGINX_CONF:-./nginx/dev/default.conf}:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/shared/http-connection-upgrade-map.conf:/etc/nginx/conf.d/http-connection-upgrade-map.conf:ro
+      - ${SSL_DOCKER_MOUNT:-./nginx/dev/ssl:/etc/nginx/dev/ssl:ro}
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     healthcheck:
       test: ["CMD", "curl", "-f", "https://localhost"]
       interval: 30s
