@@ -1,4 +1,4 @@
-- Logging -> logrotate docker logs -> visualize docker logs
+- Logging -> Inform about errors immediatly and monthly report of warnings per mail
 - Static assets with nice components (loading, blur behaviour) (image and video)
 - Conform:
   - zod
@@ -57,3 +57,4 @@ Done:
 - Docs v1 and easy make setup-project
 - husky pre push
 - Reenable eslint
+- logrotate docker logs
