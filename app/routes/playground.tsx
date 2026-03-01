@@ -1,10 +1,13 @@
-import { redirect, useLoaderData } from "react-router";
+import { Form, redirect, useLoaderData } from "react-router";
 import { Dropdown } from "~/lib/components/examples/Dropdown";
 import type { Route } from "./+types/_landing-page";
 import { LanguageSwitch } from "~/lib/i18n/LanguageSwitch";
 import { detectLanguage } from "~/lib/i18n/i18n.server";
 import { languageModuleMap } from "~/lib/i18n/locales/.server";
 import { getServerEnv } from "~/lib/utils/env.server";
+import { getCompiledMailTemplate, mailer } from "~/lib/mails/mailer.server";
+import { invariantResponse } from "~/lib/utils/error.server";
+import { redirectWithMessage } from "~/lib/utils/message.server";
 
 // This is a playground route to show of concepts and test stuff
 
@@ -19,6 +22,51 @@ export const loader = async (args: Route.LoaderArgs) => {
     language,
     locales,
   };
+};
+
+export const action = async (args: Route.ActionArgs) => {
+  if (getServerEnv().NODE_ENV === "production") {
+    return redirect("/");
+  }
+  try {
+    const textTemplatePath =
+      "app/lib/mails/templates/standard-message/text.hbs";
+    const content = {
+      headline: "Test",
+      message: "This is a test email.",
+      buttonText: "Click me",
+      buttonUrl: getServerEnv().BASE_URL,
+      greetings: "Hello!",
+    } as const;
+    const text = await getCompiledMailTemplate<typeof textTemplatePath>({
+      templatePath: textTemplatePath,
+      type: "text",
+      content,
+    });
+    const htmlTemplatePath =
+      "app/lib/mails/templates/standard-message/html.hbs";
+    const html = await getCompiledMailTemplate<typeof htmlTemplatePath>({
+      templatePath: htmlTemplatePath,
+      type: "html",
+      content,
+    });
+    await mailer({
+      from: "developer@example.com",
+      to: "user@example.com",
+      subject: "Test",
+      text,
+      html,
+    });
+  } catch (error) {
+    console.error({ error });
+    invariantResponse(false, "Server error", { status: 500 });
+  }
+
+  return redirectWithMessage("/", {
+    key: `email-message-${Date.now()}`,
+    message:
+      "Test email sent successfully. You can view it in your configured smtp or in Mailpit on dev environment (http://localhost:8025).",
+  });
 };
 
 export default function Playground() {
@@ -39,6 +87,17 @@ export default function Playground() {
           Progressive enhanced Dropdown
         </h2>
         <Dropdown />
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">Send test email</h2>
+        <Form method="post">
+          <button
+            className="hover:underline hover:font-semibold cursor-pointer"
+            type="submit"
+          >
+            Send test email
+          </button>
+        </Form>
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-semibold">

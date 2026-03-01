@@ -28,6 +28,7 @@ import { AuthenticityTokenProvider } from "remix-utils/csrf/react";
 import { useMatomo, useMatomoPageView } from "./lib/analytics/matomo.shared";
 import { combineHeaders } from "./lib/utils/headers.server";
 import { handlePrefetch } from "./lib/utils/prefetch.server";
+import { Message } from "./lib/components/examples/Message";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -142,6 +143,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links nonce={nonce} />
       </head>
       <body className="font-sans bg-white dark:bg-gray-950 text-neutral-600 dark:text-neutral-300">
+        {data !== null && data.message !== null ? (
+          <Message message={data.message} />
+        ) : null}
         {children}
         {data !== null ? (
           <script

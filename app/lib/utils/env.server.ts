@@ -89,15 +89,26 @@ const schema = z
       }
     }
     return transformed;
-  });
+  })
+  .refine(
+    (env) => typeof env.BASE_URL === "string" && env.BASE_URL.length > 0,
+    {
+      message: "BASE_URL must be a non-empty string after transform",
+      path: ["BASE_URL"],
+    }
+  );
+
+type ParsedEnv = z.infer<typeof schema> & {
+  BASE_URL: string;
+};
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends z.infer<typeof schema> {}
+    interface ProcessEnv extends ParsedEnv {}
   }
 }
 
-let env: z.infer<typeof schema>;
+let env: ParsedEnv | undefined;
 
 export function init() {
   const parsed = schema.safeParse(process.env);
@@ -112,11 +123,11 @@ export function init() {
 
     throw new Error("Invalid environment variables");
   }
-  env = parsed.data;
+  env = parsed.data as ParsedEnv;
 }
 
 export function getServerEnv() {
-  if (!env) {
+  if (typeof env === "undefined") {
     throw new Error(
       "Environment variables not initialized. Call init() first."
     );

@@ -12,7 +12,7 @@ const MESSAGE_LEVELS = [
   "negative",
 ] as const;
 
-type Message = {
+export type Message = {
   message: string;
   key: string;
   id?: string;

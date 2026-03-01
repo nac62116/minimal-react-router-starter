@@ -13,13 +13,14 @@ export const MAILER_OPTIONS = {
   },
 } as const;
 
-export async function mailer(
-  from: Mail.Options["from"],
-  to: Mail.Options["to"],
-  subject: Mail.Options["subject"],
-  text: Mail.Options["text"],
-  html: Mail.Options["html"]
-) {
+export async function mailer(options: {
+  from: Mail.Options["from"];
+  to: Mail.Options["to"];
+  subject: Mail.Options["subject"];
+  text: Mail.Options["text"];
+  html: Mail.Options["html"];
+}) {
+  const { from, to, subject, text, html } = options;
   if (
     typeof MAILER_OPTIONS.host === "undefined" ||
     typeof MAILER_OPTIONS.port === "undefined"
@@ -55,24 +56,25 @@ type StandardMessageContent = {
   message: string;
   buttonText: string;
   buttonUrl: string;
-  greeting: string;
+  greetings: string;
 };
 
 type TemplatePath =
-  | "mail-templates/standard-message/html.hbs"
-  | "mail-templates/standard-message/text.hbs";
+  | "app/lib/mails/templates/standard-message/html.hbs"
+  | "app/lib/mails/templates/standard-message/text.hbs";
 
 type TemplateContent<TemplatePath> = TemplatePath extends
-  | "mail-templates/standard-message/html.hbs"
-  | "mail-templates/standard-message/text.hbs"
+  | "app/lib/mails/templates/standard-message/html.hbs"
+  | "app/lib/mails/templates/standard-message/text.hbs"
   ? StandardMessageContent
   : never;
 
-export async function getCompiledMailTemplate<T extends TemplatePath>(
-  templatePath: TemplatePath,
-  content: TemplateContent<T>,
-  type: "text" | "html" = "html"
-) {
+export async function getCompiledMailTemplate<T extends TemplatePath>(options: {
+  templatePath: TemplatePath;
+  content: TemplateContent<T>;
+  type: "text" | "html";
+}) {
+  const { templatePath, content, type = "html" } = options;
   const bodyTemplateSource = await fs.readFile(templatePath, {
     encoding: "utf8",
   });
@@ -82,9 +84,12 @@ export async function getCompiledMailTemplate<T extends TemplatePath>(
     return body;
   }
   const baseUrl = getServerEnv().BASE_URL;
-  const layoutTemplateSource = await fs.readFile("mail-templates/layout.hbs", {
-    encoding: "utf8",
-  });
+  const layoutTemplateSource = await fs.readFile(
+    "app/lib/mails/templates/layout.hbs",
+    {
+      encoding: "utf8",
+    }
+  );
   const layoutTemplate = Handlebars.compile(layoutTemplateSource, {});
   Handlebars.registerPartial("body", body);
   const compiledHtml = layoutTemplate({ baseUrl });
