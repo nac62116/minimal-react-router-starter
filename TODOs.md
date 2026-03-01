@@ -19,6 +19,7 @@
   - ...
 - CMS (Buildtime mutations via src file changes (locales, assets, etc...) and github PRs (behind UI))
   - APP_MODE in .env, if APP_MODE === "CMS" redirect to login on every page, if logged in there are edit buttons at the things that are editable
+  - Validate user input before writing it in the src files -> zod.string() and then JSON.stringify(string)
 - Simple auth:
   - v1 only login + 2 Factor + register via db management
   - vx:
