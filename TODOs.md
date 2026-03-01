@@ -1,14 +1,5 @@
-- Test: Nodemailer, Handlebars, Mailpit (dev)
+- Static assets with nice components (loading, blur behaviour) (image and video)
 - Reenable eslint
-- simple file storage + backup + imgproxy? + image/video streaming?
-- Simple auth:
-  - v1 only login + db management
-  - vx:
-  - create user gui?
-  - reset password?
-  - SSO?
-  - Register?
-  - ...
 - Conform:
   - zod
   - utils (useEffect for state sync + submission.reply() with message)
@@ -25,8 +16,19 @@
   - Check hard and software
   - Test E-Mail over SMTP
   - ...
-- CMS (Buildtime mutations via src file changes and github PRs (behind UI))
+- CMS (Buildtime mutations via src file changes (locales, assets, etc...) and github PRs (behind UI))
+- Simple auth:
+  - v1 only login + 2 Factor + register via db management
+  - vx:
+  - create user gui?
+  - reset password?
+  - Magic link?
+  - SSO?
+  - Register?
+  - ...
 - Prisma (Runtime mutations)
+- Backup
+- simple file storage -> Include in backup + imgproxy?
 - Testing -> Include in Github workflow
 
 Done:
@@ -47,3 +49,6 @@ Done:
 - Matomo (Client)
 - Docker compose with nginx deployment + SSL with certbot + Makefile + rate limiting + top level security header
 - Github workflow
+- Test: Nodemailer, Handlebars, Mailpit (dev)
+- Docker compose enhancement -> Single compose.yml and default.conf.template
+- Docs v1 and easy make setup-project
