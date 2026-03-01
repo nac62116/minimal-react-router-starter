@@ -18,6 +18,7 @@
   - Test E-Mail over SMTP
   - ...
 - CMS (Buildtime mutations via src file changes (locales, assets, etc...) and github PRs (behind UI))
+  - APP_MODE in .env, if APP_MODE === "CMS" redirect to login on every page, if logged in there are edit buttons at the things that are editable
 - Simple auth:
   - v1 only login + 2 Factor + register via db management
   - vx:
