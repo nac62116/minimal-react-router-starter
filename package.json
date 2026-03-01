@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "if [ \"$SKIP_PREPARE\" != \"1\" ]; then husky; fi",
     "dev": "react-router dev",
     "build": "react-router build",
     "start": "react-router-serve ./build/server/index.js",

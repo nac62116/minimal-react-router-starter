@@ -1,11 +1,13 @@
 ARG NODE_VERSION=24.14.0
 
 FROM node:${NODE_VERSION} AS development-dependencies-env
+ENV SKIP_PREPARE=1
 COPY . /app
 WORKDIR /app
 RUN npm ci
 
 FROM node:${NODE_VERSION} AS production-dependencies-env
+ENV SKIP_PREPARE=1
 COPY ./package.json package-lock.json /app/
 WORKDIR /app
 RUN npm ci --omit=dev
