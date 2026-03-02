@@ -1,13 +1,16 @@
 import { Form, redirect, useLoaderData } from "react-router";
 import { Dropdown } from "~/lib/components/examples/Dropdown";
-import type { Route } from "./+types/_landing-page";
 import { LanguageSwitch } from "~/lib/i18n/LanguageSwitch";
 import { detectLanguage } from "~/lib/i18n/i18n.server";
 import { languageModuleMap } from "~/lib/i18n/locales/.server";
-import { getServerEnv } from "~/lib/utils/env.server";
 import { getCompiledMailTemplate, mailer } from "~/lib/mails/mailer.server";
+import { getServerEnv } from "~/lib/utils/env.server";
 import { invariantResponse } from "~/lib/utils/error.server";
-import { redirectWithMessage } from "~/lib/utils/message.server";
+import {
+  redirectWithMessage,
+  reloadWithMessage,
+} from "~/lib/utils/message.server";
+import type { Route } from "./+types/_landing-page";
 
 // This is a playground route to show of concepts and test stuff
 
@@ -24,10 +27,13 @@ export const loader = async (args: Route.LoaderArgs) => {
   };
 };
 
-export const action = async () => {
+export const action = async (args: Route.ActionArgs) => {
+  const { request } = args;
   if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }
+  const formData = await request.formData();
+  const shouldRedirect = formData.get("redirect");
   try {
     const textTemplatePath =
       "app/lib/mails/templates/standard-message/text.hbs";
@@ -62,7 +68,16 @@ export const action = async () => {
     invariantResponse(false, "Server error", { status: 500 });
   }
 
-  return redirectWithMessage("/", {
+  if (shouldRedirect === "true") {
+    return redirectWithMessage("/", {
+      key: `email-message-${Date.now()}`,
+      delayInMillis: "persistent",
+      message:
+        "Test email sent successfully. You can view it in your configured smtp or in Mailpit on dev environment (http://localhost:8025).",
+    });
+  }
+
+  return reloadWithMessage(null, {
     key: `email-message-${Date.now()}`,
     message:
       "Test email sent successfully. You can view it in your configured smtp or in Mailpit on dev environment (http://localhost:8025).",
@@ -95,7 +110,19 @@ export default function Playground() {
             className="hover:underline hover:font-semibold cursor-pointer"
             type="submit"
           >
-            Send test email
+            Send test email and return with message
+          </button>
+        </Form>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">Send test email</h2>
+        <Form method="post">
+          <input type="hidden" name="redirect" value="true" />
+          <button
+            className="hover:underline hover:font-semibold cursor-pointer"
+            type="submit"
+          >
+            Send test email and redirect to / with persistent message
           </button>
         </Form>
       </div>

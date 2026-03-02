@@ -143,9 +143,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links nonce={nonce} />
       </head>
       <body className="font-sans bg-white dark:bg-gray-950 text-neutral-600 dark:text-neutral-300">
-        {data !== null && data.message !== null ? (
-          <Message message={data.message} />
-        ) : null}
+        {data !== null ? <Message message={data.message} /> : null}
         {children}
         {data !== null ? (
           <script

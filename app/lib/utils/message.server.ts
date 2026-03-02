@@ -1,4 +1,4 @@
-import { createCookieSessionStorage, redirect } from "react-router";
+import { createCookieSessionStorage, data, redirect } from "react-router";
 import { sanitizeUserHtml } from "./sanitize.server";
 import { ZodError, z } from "zod";
 import { combineHeaders } from "./headers.server";
@@ -61,6 +61,32 @@ export async function redirectWithMessage(
     ...redirectOptions?.init,
     headers: combineHeaders(
       redirectOptions?.init?.headers,
+      await createMessageHeaders(message)
+    ),
+  });
+}
+
+// TODO: Known limitation with JS disabled in Browser: Flash cookie is resolved one request too late when using reloadWithMessage in the action return.
+export async function reloadWithMessage<D>(
+  responseData: D,
+  message: Message,
+  responseOptions?: {
+    init?: ResponseInit;
+  }
+) {
+  // const baseUrl = getServerEnv().BASE_URL;
+  // let finalUrl;
+  // if (url.startsWith(baseUrl)) {
+  //   finalUrl = new URL(url);
+  // } else {
+  //   finalUrl = new URL(`${baseUrl}${url}`);
+  // }
+  // finalUrl.searchParams.set("message-trigger", message.key);
+
+  return data(responseData, {
+    ...responseOptions?.init,
+    headers: combineHeaders(
+      responseOptions?.init?.headers,
       await createMessageHeaders(message)
     ),
   });
