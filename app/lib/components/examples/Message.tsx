@@ -40,7 +40,7 @@ export function Message(props: { message: Message | null }) {
     <p
       id={message.id ?? "message"}
       key={message.key}
-      className={`absolute left-0 top-0 right-0 text-center rounded-sm p-2 ${message.level === "positive" ? "bg-green-700 text-white" : message.level === "neutral" ? "bg-neutral-400 text-neutral-800" : message.level === "attention" ? "bg-yellow-500 text-neutral-800" : "bg-red-900 text-white"}`}
+      className={`fixed left-0 top-0 right-0 text-center rounded-sm p-2 ${message.level === "positive" ? "bg-green-700 text-white" : message.level === "neutral" ? "bg-neutral-400 text-neutral-800" : message.level === "attention" ? "bg-yellow-500 text-neutral-800" : "bg-red-900 text-white"}`}
     >
       <span>{message.message}</span>
       {isHydrated === false || message.delayInMillis === "persistent" ? (
