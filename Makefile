@@ -44,6 +44,7 @@ create-dev-certs: ## Create self-signed development certificates (for HTTPS in d
 
 setup-certbot-with-autorenewal: ## Make sure to add a correct A record for your domain before you run this. This sets up certbot with nginx plugin and auto-renewal (for production, to get real certificates).
 	sudo certbot certonly --nginx -d ${DOMAIN} --agree-tos --no-eff-email -m ${CERTBOT_UPDATES_RECEIVER}
+	sudo certbot renew --dry-run
 
 nginx-conf: ## Generate nginx/default.conf from template using envsubst and .env DOMAIN
 	@export DOMAIN=$$(grep '^DOMAIN=' .env | head -n1 | sed 's/#.*//' | cut -d '=' -f2- | tr -d '\"' | xargs) && envsubst '$$DOMAIN' < ./nginx/default.conf.template > ./nginx/default.conf
