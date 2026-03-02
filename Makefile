@@ -51,6 +51,7 @@ nginx-conf: ## Generate nginx/default.conf from template using envsubst and .env
 fresh-packages-and-clean-build: ## Cleanup node_modules and build directories
 	@rm -rf ./build
 	@rm -rf ./node_modules
+	@rm -rf package-lock.json
 	@npm cache clean --force
 	npm install
 	npm run build
