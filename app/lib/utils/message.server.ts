@@ -67,22 +67,13 @@ export async function redirectWithMessage(
 }
 
 // TODO: Known limitation with JS disabled in Browser: Flash cookie is resolved one request too late when using reloadWithMessage in the action return.
-export async function reloadWithMessage<D>(
+export async function dataWithMessage<D>(
   responseData: D,
   message: Message,
   responseOptions?: {
     init?: ResponseInit;
   }
 ) {
-  // const baseUrl = getServerEnv().BASE_URL;
-  // let finalUrl;
-  // if (url.startsWith(baseUrl)) {
-  //   finalUrl = new URL(url);
-  // } else {
-  //   finalUrl = new URL(`${baseUrl}${url}`);
-  // }
-  // finalUrl.searchParams.set("message-trigger", message.key);
-
   return data(responseData, {
     ...responseOptions?.init,
     headers: combineHeaders(

@@ -8,7 +8,7 @@ import { getServerEnv } from "~/lib/utils/env.server";
 import { invariantResponse } from "~/lib/utils/error.server";
 import {
   redirectWithMessage,
-  reloadWithMessage,
+  dataWithMessage,
 } from "~/lib/utils/message.server";
 import type { Route } from "./+types/_landing-page";
 
@@ -77,7 +77,7 @@ export const action = async (args: Route.ActionArgs) => {
     });
   }
 
-  return reloadWithMessage(null, {
+  return dataWithMessage(null, {
     key: `email-message-${Date.now()}`,
     message:
       "Test email sent successfully. You can view it in your configured smtp or in Mailpit on dev environment (http://localhost:8025).",
