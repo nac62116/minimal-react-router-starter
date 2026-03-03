@@ -1,3 +1,7 @@
+import "@fontsource/source-sans-pro/latin-400.css";
+import "@fontsource/source-sans-pro/latin-600.css";
+import "@fontsource/source-sans-pro/latin-700.css";
+import "@fontsource/source-sans-pro/latin-900.css";
 import {
   data,
   isRouteErrorResponse,
@@ -12,7 +16,6 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "react-router";
-
 import type { Route } from "./+types/root";
 import "./app.css";
 import { getMessage } from "./lib/utils/message.server";
