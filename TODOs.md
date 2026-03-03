@@ -1,4 +1,5 @@
 - Logging -> Inform about errors immediatly and monthly report of warnings per mail
+- Embed fonts from @fontsource package instead of using the copy in public folder
 - Static assets with nice components (loading, blur behaviour) (image and video)
 - Conform:
   - zod
