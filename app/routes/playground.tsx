@@ -16,6 +16,7 @@ import type { Route } from "./+types/_landing-page";
 
 export const loader = async (args: Route.LoaderArgs) => {
   const { request } = args;
+  invariantResponse(false, "Test error", { status: 500 });
   if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }

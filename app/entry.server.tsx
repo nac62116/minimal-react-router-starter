@@ -3,6 +3,7 @@ import { PassThrough } from "node:stream";
 import {
   type AppLoadContext,
   type EntryContext,
+  type HandleErrorFunction,
   ServerRouter,
 } from "react-router";
 import { createReadableStreamFromReadable } from "@react-router/node";
@@ -15,6 +16,11 @@ import { getEnv, getServerEnv, init as initEnv } from "./lib/utils/env.server";
 import { randomBytes } from "node:crypto";
 import { createCSPHeaderOptions } from "./lib/utils/headers.server";
 import { NonceProvider } from "./lib/security/nonce-provider.shared";
+import {
+  sanitizeErrorMessage,
+  sanitizeRequest,
+  sanitizeStack,
+} from "./lib/utils/log.server";
 
 // Typesafe environment variables on the server and public ones on the client (See lib/utils/env.server.ts and root.tsx for details and usage)
 initEnv();
@@ -140,3 +146,29 @@ export default function handleRequest(
     );
   });
 }
+
+export const handleError: HandleErrorFunction = (error, { request }) => {
+  if (request.signal.aborted) return;
+
+  if (getServerEnv().NODE_ENV === "production") {
+    console.error(
+      JSON.stringify(
+        {
+          error:
+            error instanceof Error
+              ? sanitizeErrorMessage(error.message)
+              : String(error),
+          stack:
+            error instanceof Error && error.stack
+              ? sanitizeStack(error.stack)
+              : undefined,
+          request: sanitizeRequest(request),
+        },
+        null,
+        2
+      )
+    );
+  } else {
+    console.error(error);
+  }
+};

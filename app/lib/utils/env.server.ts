@@ -80,7 +80,7 @@ const schema = z
         (env.MAILER_HOST === "localhost" || env.MAILER_HOST === "127.0.0.1")
       ) {
         console.warn(
-          "You are trying to reference your SMTP server via localhost, which is not working inside a docker container. Consider adding your SMTP server to the docker compose service network and referencing it by the service name instead of localhost. If this warning was produced whilke testing docker deployment locally, you can safely ignore it."
+          "Note: If below warning was produced while testing docker deployment locally, you can safely ignore it. Your env MAILER_HOST just was switched from localhost to mailpit, to work in docker.\n[warning] react-router-starter:env.server.ts: You are trying to reference your SMTP server via localhost, which is not working inside a docker container. Consider adding your SMTP server to the docker compose service network and referencing it by the service name instead of localhost."
         );
         transformed.MAILER_HOST = "mailpit";
       }

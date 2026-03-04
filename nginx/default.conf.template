@@ -29,6 +29,9 @@ server {
 	# Hide nginx version
 	server_tokens off;
 
+  # GDPR compliant logging (Scrapping ips)
+  access_log /var/log/nginx/access.log gdpr_safe;
+
 	# Security headers (Added manually on 24.04.25)
 	add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
 	add_header X-Content-Type-Options "nosniff" always;

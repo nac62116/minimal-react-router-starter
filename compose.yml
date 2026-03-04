@@ -41,7 +41,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/http-connection-upgrade-map.conf:/etc/nginx/conf.d/http-connection-upgrade-map.conf:ro
+      - ./nginx/gdpr-safe-logs.conf:/etc/nginx/conf.d/00-gdpr-safe-logs.conf:ro
+      - ./nginx/http-connection-upgrade-map.conf:/etc/nginx/conf.d/01-http-connection-upgrade-map.conf:ro
       - ${SSL_DOCKER_MOUNT:-./nginx/dev/ssl:/etc/letsencrypt:ro}
     ports:
       - 80:80
