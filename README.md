@@ -20,7 +20,7 @@
 
 ## Start dev
 
-- React Router dev server with HMR and more:
+- React Router dev server with HMR and more (Nice DX):
   - `nvm use`
   - `npm run dev`
   - App reachable through http://localhots:3000
@@ -28,7 +28,7 @@
   - `npm run docker:build`
   - `npm run docker:start`
   - App reachable via self signed cert on https://localhost
-- Remember to rebuild for changes to take effect
+  - Remember to rebuild for changes to take effect
 - Dev Mailer (Mailpit) is automatically started and reachable on http://localhost:8025
 
 ## Setup prod
