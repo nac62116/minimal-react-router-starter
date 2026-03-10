@@ -31,6 +31,8 @@ server {
 
   # GDPR compliant logging (Scrapping ips)
   access_log /var/log/nginx/access.log gdpr_safe;
+  # Only log above warn (warn, error, crit, alert, emerg). Silently drop debug, info and notice.
+  error_log /dev/stderr warn;
 
 	# Security headers (Added manually on 24.04.25)
 	add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;

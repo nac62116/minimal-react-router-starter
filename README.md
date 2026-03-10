@@ -3,12 +3,13 @@
 ## Install required packages
 
 - You need to install Docker on Ubuntu (https://docs.docker.com/engine/install/ubuntu/) or Docker Desktop (https://www.docker.com/products/docker-desktop/)
-- Other dependencies are auto installed with the `make setup-project-<dev|prod>` commands explained below. These are:
-  - openssl via apt or homebrew (Only dev)
-  - curl via apt or homebrew (Only dev)
-  - nvm via their install script (Only dev) -> https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh
-  - certbot via atp (Only prod)
-  - python3-certbot-nginx via atp (Only prod)
+- And make to run Makefile recipes (f.e. apt install make)
+- Other dependencies are auto installed with the `make setup-project-<dev|prod>` commands. These are:
+  - Dev only: openssl via apt or homebrew
+  - Dev only: curl via apt or homebrew
+  - Dev only: nvm via their install script -> https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh
+  - Prod only: certbot via atp
+  - Prod only: python3-certbot-nginx via atp
 
 ## Setup dev
 

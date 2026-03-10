@@ -1,4 +1,3 @@
-- Logging -> Inform about errors immediatly and monthly report of warnings per mail
 - Static assets with nice components (loading, blur behaviour) (image and video)
 - Conform:
   - zod
@@ -59,3 +58,4 @@ Done:
 - Reenable eslint
 - logrotate docker logs
 - Embed fonts from @fontsource package instead of using the copy in public folder
+- Logging -> GDPR safe, no mail reports, logs are persisted via journald with log retention 30 days and 500mb max size

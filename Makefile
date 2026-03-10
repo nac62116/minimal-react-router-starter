@@ -11,9 +11,21 @@ setup-project-dev-on-mac: install-dev-packages-brew setup-project-dev ## Descrip
 
 setup-project-dev-on-linux: install-dev-packages-apt setup-project-dev ## Description see make help -> setup-project-dev
 
-setup-project-dev: create-dev-certs nginx-conf fresh-packages-and-clean-build react-router-typegen create-docker-network mailer-start ## Before executing make sure to setup your .env! You can simply copy .env.example for local development. --- Setup the project for development. This includes generating self-signed certs for HTTPS in development, generating nginx config from template, installing npm packages and starting MailPit for email testing. The app needs to be started afterwards with either "npm run dev", or with "npm run docker:build" and "npm run docker:start". Afterwards the app is either reachable at https://locahost:3000 (npm run dev) or at https://localhost (docker setup).
+setup-project-dev: change-docker-log-driver create-dev-certs nginx-conf fresh-packages-and-clean-build react-router-typegen create-docker-network mailer-start ## Before executing make sure to setup your .env! You can simply copy .env.example for local development. --- Setup the project for development. This includes generating self-signed certs for HTTPS in development, generating nginx config from template, installing npm packages and starting MailPit for email testing. The app needs to be started afterwards with either "npm run dev", or with "npm run docker:build" and "npm run docker:start". Afterwards the app is either reachable at https://locahost:3000 (npm run dev) or at https://localhost (docker setup).
 
-setup-project-prod: install-prod-packages-apt setup-certbot-with-autorenewal nginx-conf fresh-packages-and-clean-build create-docker-network ## Before executing make sure to setup your .env and point your domain to this server (f.e. DNS A Record)! --- Setup the project for production. This includes setting up certbot with nginx plugin and auto-renewal for real SSL certificates, generating nginx config from template, and installing npm packages. The app needs to be started with "npm run docker:build" and "npm run docker:start". Afterwards the app is reachable at the DOMAIN and BASE_URL specified in .env.
+setup-project-prod-on-linux: setup-gdpr-safe-log-retention install-prod-packages-apt setup-certbot-with-autorenewal nginx-conf fresh-packages-and-clean-build create-docker-network ## Before executing make sure to setup your .env and point your domain to this server (f.e. DNS A Record)! --- Setup the project for production. This includes setting up certbot with nginx plugin and auto-renewal for real SSL certificates, generating nginx config from template, and installing npm packages. Afterwards the app can be started with "npm run docker:start" and rebuild with "npm run docker:build". The app is reachable via the DOMAIN and BASE_URL specified in .env.
+
+setup-gdpr-safe-log-retention: ## The compose file specifies journald as logging driver on production. This means your system logs will also be affected by the log retention of 30 days and the max size of 500mb. Remove it from the setup-project-prod-on-linux recipe if you don't want this. (Don't use the compose.override.yml.example on prod! This will cap your logs to 10mb and 3 files)
+	sudo sed -i 's/#MaxRetentionSec=/MaxRetentionSec=/' /etc/systemd/journald.conf
+	sudo sed -i 's/MaxRetentionSec=.*/MaxRetentionSec=30day/' /etc/systemd/journald.conf
+	sudo sed -i 's/#SystemMaxUse=/SystemMaxUse=/' /etc/systemd/journald.conf
+	sudo sed -i 's/SystemMaxUse=.*/SystemMaxUse=500M/' /etc/systemd/journald.conf
+	sudo systemctl restart systemd-journald
+	sudo journalctl --vacuum-time=30d
+	sudo journalctl --vacuum-size=500M
+
+change-docker-log-driver: ## Logging is set up for gdpr safe production use in compose.yml per default (log retention of 30 days and max size of 500mb). For development we can use json-driver with smaller log files to be compatible accross different operating systems.
+	@cp compose.override.yml.example compose.override.yml
 
 install-dev-packages-apt: ## Install necessary apt packages for development setup. This includes openssl, curl, node and docker.
 	@sudo apt update

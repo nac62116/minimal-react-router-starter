@@ -9,3 +9,6 @@
 # nginx
 /nginx/dev/ssl/
 /nginx/default.conf
+
+# Docker
+compose.override.yml

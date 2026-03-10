@@ -28,10 +28,9 @@ services:
     env_file:
       - .env
     logging:
-      driver: "json-file"
+      driver: "journald"
       options:
-        max-size: "10m"
-        max-file: "10"
+        tag: "react-router-{{.Name}}"
     networks:
       - react-router-starter-network
 
@@ -48,10 +47,9 @@ services:
       - 80:80
       - 443:443
     logging:
-      driver: "json-file"
+      driver: "journald"
       options:
-        max-size: "10m"
-        max-file: "10"
+        tag: "nginx-{{.Name}}"
     networks:
       - react-router-starter-network
 
