@@ -77,6 +77,18 @@ function Img(props: ImageProps) {
             aria-hidden="true"
           />
         ) : null}
+        {props.src ? (
+          <noscript>
+            <img
+              ref={imageRef}
+              src={props.src}
+              alt={loaded ? props.alt || "" : ""}
+              className={`absolute size-full inset-0 ${
+                resizeType === "fit" ? "object-contain" : "object-cover"
+              }`}
+            />
+          </noscript>
+        ) : null}
       </div>
     </>
   );
