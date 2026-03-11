@@ -11,12 +11,15 @@ import {
   dataWithMessage,
 } from "~/lib/utils/message.server";
 import type { Route } from "./+types/_landing-page";
+import testImageSrc from "~/assets/432_430.webp";
+import testImageThumbnailSrc from "~/assets/432_430-thumbnail.webp";
+import { Img } from "~/lib/components/Img";
 
 // This is a playground route to show of concepts and test stuff
 
 export const loader = async (args: Route.LoaderArgs) => {
   const { request } = args;
-  invariantResponse(false, "Test error", { status: 500 });
+  // invariantResponse(false, "Test error", { status: 500 });
   if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }
@@ -90,6 +93,23 @@ export default function Playground() {
   return (
     <div className="flex flex-col gap-6 p-8">
       <h1 className="text-3xl font-semibold">Example components</h1>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">
+          Image component with blurred thumbnail and fade in effect
+        </h2>
+        <Img.Frame
+          variant="1:1"
+          divProps={{
+            className: "w-40",
+          }}
+        >
+          <Img
+            thumbnailSrc={testImageThumbnailSrc}
+            src={testImageSrc}
+            alt="Test image"
+          />
+        </Img.Frame>
+      </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-semibold">Language Switch</h2>
         <div className="flex flex-col gap-1">

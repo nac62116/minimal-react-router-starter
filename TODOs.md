@@ -1,7 +1,7 @@
-- Static assets with nice components (loading, blur behaviour) (image and video)
+- Static assets with nice components (loading, blur behaviour) (video)
 - Conform:
   - zod
-  - utils (useEffect for state sync + submission.reply() with message)
+  - utils (useEffect for state sync)
   - Functional components (with prop spreading classname functionality)
     - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
     - theme toggle (Optimistic UI + set client side cookie + setTheme via Provider) -> First look at inspiration useTheme (see web-auth or epic-stack)
@@ -59,3 +59,4 @@ Done:
 - logrotate docker logs
 - Embed fonts from @fontsource package instead of using the copy in public folder
 - Logging -> GDPR safe, no mail reports, logs are persisted via journald with log retention 30 days and 500mb max size
+- Static assets with nice components (loading, blur behaviour) (image)
