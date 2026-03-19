@@ -41,9 +41,11 @@ install-nvm:
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 	. $$HOME/.nvm/nvm.sh && nvm install ${NODE_VERSION} && nvm use ${NODE_VERSION}
 
-install-prod-packages-apt: ## Install necessary apt packages for production setup. This includes openssl and curl.
+install-prod-packages-apt: ## Install necessary apt packages for production setup. This includes certbot and python3-certbot-nginx.
 	@sudo apt update
 	sudo apt install certbot python3-certbot-nginx
+	@sudo systemctl stop nginx
+	@sudo systemctl disable nginx
 
 create-dev-certs: ## Create self-signed development certificates (for HTTPS in development, to test docker setup locally). Note that browsers will show a warning when using self-signed certificates, which is expected. You can usually click "Advanced" and then "Proceed to localhost (unsafe)" to bypass the warning when testing locally.
 	@mkdir -p ./nginx/dev/ssl
