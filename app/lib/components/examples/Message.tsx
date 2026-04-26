@@ -29,8 +29,7 @@ export function Message(props: { message: Message | null }) {
     } else {
       return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation.state]);
+  }, [navigation.state, props.message]);
 
   if (message === null) {
     return null;

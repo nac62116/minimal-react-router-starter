@@ -10,6 +10,8 @@ import { type ArrayElement } from "../utils/types.server";
 import { invariantResponse } from "../utils/error.server";
 import { getServerEnv } from "../utils/env.server";
 
+// * - Full list: https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+// * - Comprehensive list (more grouped): https://www.niefuend.org/blog/internet/2017/10/alle-accept-language-codes-mit-laendernamen/
 const supportedHeaderLanguages = [
   "de",
   "de-at",

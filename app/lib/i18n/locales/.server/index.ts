@@ -9,11 +9,6 @@ import { locale as enExampleFromFolderLocale } from "./en/example-locale-folder/
 import { locale as enExampleLocale } from "./en/example";
 
 /**
- * This is the map of all language modules.
- *
- * The key is the language code in combination with the route pathname.
- * The values are fully typed locales from those routes.
- *
  * To add a new language following steps are required:
  *
  * 1. Copy an existing language folder and rename it to the new language code.
