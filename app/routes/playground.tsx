@@ -15,8 +15,6 @@ import beachImageSrc from "~/assets/images/beach.webp";
 import beachImageThumbnailSrc from "~/assets/images/beach_thumbnail.webp";
 import coconutImageSrc from "~/assets/images/coconut.webp";
 import coconutImageThumbnailSrc from "~/assets/images/coconut_thumbnail.webp";
-import beachVideoSrc from "~/assets/videos/beach-video.mp4";
-import beachVideoThumbnailSrc from "~/assets/images/beach-video_thumbnail.webp";
 import sunsetVideoSrc from "~/assets/videos/sunset.mp4";
 import sunsetVideoThumbnailSrc from "~/assets/images/sunset_thumbnail.webp";
 import { Media } from "~/lib/components/Media";
@@ -103,87 +101,62 @@ export default function Playground() {
         <h2 className="text-2xl font-semibold">
           Media components with blurred thumbnail and fade in effect
         </h2>
-        <div className="grid grid-cols-1 grid-rows-2 gap-8">
-          <div className="flex gap-8">
-            <Media.Frame
-              variant="4:3"
-              divProps={{
-                className: "h-80",
+        <div className="flex gap-8 items-center">
+          <Media.Frame
+            variant="4:3"
+            divProps={{
+              className: "h-80",
+            }}
+          >
+            <Media.Img
+              imageProps={{
+                src: beachImageSrc,
+                alt: "Beach",
               }}
-            >
-              <Media.Img
-                imageProps={{
-                  src: beachImageSrc,
-                  alt: "Beach",
-                }}
-                thumbnailProps={{
-                  src: beachImageThumbnailSrc,
-                  alt: "Beach thumbnail",
-                }}
-              />
-            </Media.Frame>
-            <Media.Frame
-              variant="3:2"
-              divProps={{
-                className: "h-80",
+              thumbnailProps={{
+                src: beachImageThumbnailSrc,
+                alt: "Beach thumbnail",
               }}
-            >
-              <Media.Img
-                thumbnailProps={{
-                  src: coconutImageThumbnailSrc,
-                  alt: "Coconut thumbnail",
-                }}
-                imageProps={{
-                  src: coconutImageSrc,
-                  alt: "Coconut",
-                }}
-              />
-            </Media.Frame>
-          </div>
-          <div className="flex gap-8">
-            <Media.Frame
-              variant="16:9"
-              divProps={{
-                className: "h-60",
+            />
+          </Media.Frame>
+          <Media.Frame
+            variant="3:2"
+            divProps={{
+              className: "h-80",
+            }}
+          >
+            <Media.Img
+              thumbnailProps={{
+                src: coconutImageThumbnailSrc,
+                alt: "Coconut thumbnail",
               }}
-            >
-              <Media.Video
-                videoProps={{
-                  autoPlay: true,
-                  loop: true,
-                }}
-                sourceProps={{
-                  src: beachVideoSrc,
-                  type: "video/mp4",
-                }}
-                thumbnailProps={{
-                  src: beachVideoThumbnailSrc,
-                  alt: "Beach video",
-                }}
-              />
-            </Media.Frame>
-            <Media.Frame
-              variant="3:2"
-              divProps={{
-                className: "h-60",
+              imageProps={{
+                src: coconutImageSrc,
+                alt: "Coconut",
               }}
-            >
-              <Media.Video
-                videoProps={{
-                  autoPlay: true,
-                  loop: true,
-                }}
-                sourceProps={{
-                  src: sunsetVideoSrc,
-                  type: "video/mp4",
-                }}
-                thumbnailProps={{
-                  src: sunsetVideoThumbnailSrc,
-                  alt: "Sunset video",
-                }}
-              />
-            </Media.Frame>
-          </div>
+            />
+          </Media.Frame>
+          <Media.Frame
+            variant="1:1"
+            divProps={{
+              className: "h-80",
+            }}
+          >
+            <Media.Video
+              videoProps={{
+                autoPlay: true,
+                loop: true,
+              }}
+              sourceProps={{
+                src: sunsetVideoSrc,
+                type: "video/mp4",
+              }}
+              thumbnailProps={{
+                src: sunsetVideoThumbnailSrc,
+                alt: "Sunset video",
+              }}
+            />
+          </Media.Frame>
         </div>
       </div>
       <div className="flex flex-col gap-2">
