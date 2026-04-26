@@ -14,6 +14,7 @@ import type { Route } from "./+types/_landing-page";
 import testImageSrc from "~/assets/432_430.webp";
 import testImageThumbnailSrc from "~/assets/432_430-thumbnail.webp";
 import { Img } from "~/lib/components/Img";
+import { MatomoOptOut } from "~/lib/analytics/MatomoOptOut";
 
 // This is a playground route to show of concepts and test stuff
 
@@ -146,6 +147,19 @@ export default function Playground() {
             Send test email and redirect to / with persistent message
           </button>
         </Form>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold">MatomoOptOut Checkbox</h2>
+        <MatomoOptOut
+          locales={{
+            trackerActive: "Matomo tracker is active",
+            trackerInactive: "Matomo tracker is inactive",
+            doNotTrackEnabled:
+              "Do Not Track is enabled in your browser, so we respect your privacy and have not activated the Matomo tracker.",
+            matomoNotConfigured:
+              "Matomo is not configured. Please set the MATOMO_URL and MATOMO_SITE_ID environment variables to enable tracking.",
+          }}
+        />
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-semibold">
