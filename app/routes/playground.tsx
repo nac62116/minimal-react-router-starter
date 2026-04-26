@@ -11,16 +11,21 @@ import {
   dataWithMessage,
 } from "~/lib/utils/message.server";
 import type { Route } from "./+types/_landing-page";
-import testImageSrc from "~/assets/432_430.webp";
-import testImageThumbnailSrc from "~/assets/432_430-thumbnail.webp";
-import { Img } from "~/lib/components/Img";
+import beachImageSrc from "~/assets/images/beach.webp";
+import beachImageThumbnailSrc from "~/assets/images/beach_thumbnail.webp";
+import coconutImageSrc from "~/assets/images/coconut.webp";
+import coconutImageThumbnailSrc from "~/assets/images/coconut_thumbnail.webp";
+import beachVideoSrc from "~/assets/videos/beach-video.mp4";
+import beachVideoThumbnailSrc from "~/assets/images/beach-video_thumbnail.webp";
+import sunsetVideoSrc from "~/assets/videos/sunset.mp4";
+import sunsetVideoThumbnailSrc from "~/assets/images/sunset_thumbnail.webp";
+import { Media } from "~/lib/components/Media";
 import { MatomoOptOut } from "~/lib/analytics/MatomoOptOut";
 
 // This is a playground route to show of concepts and test stuff
 
 export const loader = async (args: Route.LoaderArgs) => {
   const { request } = args;
-  // invariantResponse(false, "Test error", { status: 500 });
   if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }
@@ -96,20 +101,90 @@ export default function Playground() {
       <h1 className="text-3xl font-semibold">Example components</h1>
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-semibold">
-          Image component with blurred thumbnail and fade in effect
+          Media components with blurred thumbnail and fade in effect
         </h2>
-        <Img.Frame
-          variant="1:1"
-          divProps={{
-            className: "w-40",
-          }}
-        >
-          <Img
-            thumbnailSrc={testImageThumbnailSrc}
-            src={testImageSrc}
-            alt="Test image"
-          />
-        </Img.Frame>
+        <div className="grid grid-cols-1 grid-rows-2 gap-8">
+          <div className="flex gap-8">
+            <Media.Frame
+              variant="4:3"
+              divProps={{
+                className: "h-80",
+              }}
+            >
+              <Media.Img
+                imageProps={{
+                  src: beachImageSrc,
+                  alt: "Beach",
+                }}
+                thumbnailProps={{
+                  src: beachImageThumbnailSrc,
+                  alt: "Beach thumbnail",
+                }}
+              />
+            </Media.Frame>
+            <Media.Frame
+              variant="3:2"
+              divProps={{
+                className: "h-80",
+              }}
+            >
+              <Media.Img
+                thumbnailProps={{
+                  src: coconutImageThumbnailSrc,
+                  alt: "Coconut thumbnail",
+                }}
+                imageProps={{
+                  src: coconutImageSrc,
+                  alt: "Coconut",
+                }}
+              />
+            </Media.Frame>
+          </div>
+          <div className="flex gap-8">
+            <Media.Frame
+              variant="16:9"
+              divProps={{
+                className: "h-60",
+              }}
+            >
+              <Media.Video
+                videoProps={{
+                  autoPlay: true,
+                  loop: true,
+                }}
+                sourceProps={{
+                  src: beachVideoSrc,
+                  type: "video/mp4",
+                }}
+                thumbnailProps={{
+                  src: beachVideoThumbnailSrc,
+                  alt: "Beach video",
+                }}
+              />
+            </Media.Frame>
+            <Media.Frame
+              variant="3:2"
+              divProps={{
+                className: "h-60",
+              }}
+            >
+              <Media.Video
+                videoProps={{
+                  autoPlay: true,
+                  loop: true,
+                }}
+                sourceProps={{
+                  src: sunsetVideoSrc,
+                  type: "video/mp4",
+                }}
+                thumbnailProps={{
+                  src: sunsetVideoThumbnailSrc,
+                  alt: "Sunset video",
+                }}
+              />
+            </Media.Frame>
+          </div>
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-semibold">Language Switch</h2>

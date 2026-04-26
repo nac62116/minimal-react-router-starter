@@ -23,7 +23,6 @@ export function MatomoOptOut(props: {
           setIsOptedOutOfMatomo(dnt === true ? true : this.isUserOptedOut());
         },
       ]);
-      throw "Test";
     } catch (error) {
       console.warn(`Matomo Opt-Out initialization failed.`);
       const formData = new FormData();

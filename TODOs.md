@@ -1,4 +1,3 @@
-- Static assets with nice components (loading, blur behaviour) (video)
 - Conform:
   - zod
   - utils (useEffect for state sync)
@@ -48,7 +47,7 @@ Done:
 - allowIndexing
 - splat route
 - CSRF and Honeypot
-- Matomo (Client)
+- Matomo (Client) + Opt Out
 - Docker compose with nginx deployment + SSL with certbot + Makefile + rate limiting + top level security header
 - Github workflow
 - Test: Nodemailer, Handlebars, Mailpit (dev)
@@ -59,4 +58,4 @@ Done:
 - logrotate docker logs
 - Embed fonts from @fontsource package instead of using the copy in public folder
 - Logging -> GDPR safe, no mail reports, logs are persisted via journald with log retention 30 days and 500mb max size
-- Static assets with nice components (loading, blur behaviour) (image)
+- Static assets with nice components (loading, blur behaviour) (image and video)

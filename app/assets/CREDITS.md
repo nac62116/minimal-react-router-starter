@@ -1,0 +1,4 @@
+- beach(\_thumbnail).webp: https://unsplash.com/photos/sea-waves-crashing-on-shore-during-daytime-FjDaN9WlRLg
+- coconut(\_thumbnail).webp: https://unsplash.com/photos/brown-round-ball-on-white-sand-during-daytime-cz6F-gipkuQ
+- beach-video.mp4: https://www.pexels.com/video/sea-16598950/
+- sunset.mp4: https://www.pexels.com/video/breathtaking-ocean-sunset-timelapse-34337750/
