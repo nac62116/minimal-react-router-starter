@@ -22,13 +22,13 @@ export function MatomoOptOut(props: {
   );
 
   useEffect(() => {
-    if (navigator.doNotTrack === "1") return;
     try {
+      const dnt = navigator.doNotTrack === "1";
       const _paq = (window._paq = window._paq || []);
       _paq.push([
         function () {
           // @ts-expect-error - Matomo docs mention that this works. https://developer.matomo.org/guides/tracking-javascript-guide
-          setIsOptedOutOfMatomo(this.isUserOptedOut());
+          setIsOptedOutOfMatomo(dnt ? true : this.isUserOptedOut());
         },
       ]);
     } catch (error) {
