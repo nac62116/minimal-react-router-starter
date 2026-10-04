@@ -5,10 +5,10 @@
   <p>
     {{message}}
   </p>
-  <a href="{{buttonUrl}}">
-    {{buttonText}}
-  </a>
-  <p>
+  {{#if buttonUrl}}<a href="{{buttonUrl}}">{{/if}}
+    {{#if buttonText}}{{buttonText}}{{/if}}
+    {{#if buttonUrl}}</a>{{/if}}
+  {{#if greetings}}<p>
     {{greetings}}
-  </p>
+  </p>{{/if}}
 </div>

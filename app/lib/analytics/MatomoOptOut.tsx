@@ -1,4 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+
+// DNT never changes while the page is open, so there's nothing to subscribe to.
+// Defined outside the component so the reference is stable.
+const subscribeNoop = () => () => {};
 
 export function MatomoOptOut(props: {
   locales: {
@@ -10,17 +14,21 @@ export function MatomoOptOut(props: {
 }) {
   const { locales } = props;
   const [isOptedOutOfMatomo, setIsOptedOutOfMatomo] = useState(false);
-  const [doNotTrack, setDoNotTrack] = useState(false);
+
+  const doNotTrack = useSyncExternalStore(
+    subscribeNoop,
+    () => navigator.doNotTrack === "1", // client
+    () => false // server and hydration
+  );
 
   useEffect(() => {
+    if (navigator.doNotTrack === "1") return;
     try {
-      const dnt = navigator.doNotTrack === "1";
-      setDoNotTrack(dnt);
       const _paq = (window._paq = window._paq || []);
       _paq.push([
         function () {
           // @ts-expect-error - Matomo docs mention that this works. https://developer.matomo.org/guides/tracking-javascript-guide
-          setIsOptedOutOfMatomo(dnt === true ? true : this.isUserOptedOut());
+          setIsOptedOutOfMatomo(this.isUserOptedOut());
         },
       ]);
     } catch (error) {

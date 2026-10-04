@@ -23,7 +23,11 @@ import { MatomoOptOut } from "~/lib/analytics/MatomoOptOut";
 // This is a playground route to show of concepts and test stuff
 
 export const loader = async (args: Route.LoaderArgs) => {
-  const { request } = args;
+  // notice about request.url and url difference
+  // request.url contains the original url with react routers .data suffix appended -> for example: /playground.data
+  // url contains normalized url
+  // See https://reactrouter.com/upgrading/v7#futurev8_passthroughrequests
+  const { request /*, url */ } = args;
   if (getServerEnv().NODE_ENV === "production") {
     return redirect("/");
   }

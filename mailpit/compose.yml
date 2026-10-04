@@ -2,7 +2,7 @@ name: "dev-mailpit"
 
 services:
   mailpit:
-    image: axllent/mailpit
+    image: axllent/mailpit:latest
     container_name: dev-mailpit
     ports:
       - 8025:8025   # Web UI

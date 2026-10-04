@@ -12,6 +12,8 @@ import {
   ScrollRestoration,
   useLoaderData,
   useLocation,
+  useSearchParams,
+  useSubmit,
   type HeadersArgs,
   type LoaderFunctionArgs,
   type MetaFunction,
@@ -32,6 +34,7 @@ import { useMatomo, useMatomoPageView } from "./lib/analytics/matomo.shared";
 import { combineHeaders } from "./lib/utils/headers.server";
 import { handlePrefetch } from "./lib/utils/prefetch.server";
 import { Message } from "./lib/components/examples/Message";
+import { useEffect } from "react";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -143,7 +146,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <meta name="robots" content="noindex, nofollow" />
         )}
         <Meta />
-        <Links nonce={nonce} />
+        {/* This fixes a hydration error on dev introduced by react 19.3.0. React Router does not yet provide a suppressHydrationWarning attribute on <Links/> */}
+        <Links nonce={ENV.MODE === "production" ? nonce : ""} />
       </head>
       <body className="font-sans bg-white dark:bg-gray-950 text-neutral-600 dark:text-neutral-300">
         {children}
@@ -154,6 +158,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             dangerouslySetInnerHTML={{
               __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
             }}
+            suppressHydrationWarning
           />
         ) : null}
         <ScrollRestoration nonce={nonce} />
@@ -187,6 +192,35 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     details = error.message;
     stack = error.stack;
   }
+
+  const browserNetworkErrors = [
+    "Load failed",
+    "Failed to fetch",
+    "NetworkError when attempting to fetch resource",
+    "Unable to decode turbo-stream response",
+  ];
+  const hasNetworkIssues = browserNetworkErrors.some((e) =>
+    details.includes(e)
+  );
+  if (hasNetworkIssues) {
+    message = "Network Error";
+    details =
+      "There seems to be a network issue. Please check your connection and try again.";
+    stack = undefined;
+  }
+  const [searchParams] = useSearchParams();
+  const currentRetry = searchParams.get("retry");
+  const submit = useSubmit();
+  useEffect(() => {
+    if (hasNetworkIssues && currentRetry === null) {
+      submit(
+        {
+          retry: 1,
+        },
+        { method: "GET", replace: true }
+      ).catch(() => {});
+    }
+  }, [hasNetworkIssues, currentRetry, submit]);
 
   return (
     <main className="pt-16 p-4 container mx-auto">

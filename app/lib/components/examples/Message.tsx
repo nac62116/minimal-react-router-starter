@@ -6,30 +6,25 @@ import type { Message } from "~/lib/utils/message.server";
 // Simple Message component to display the message from lib/utils/message.server.ts
 export function Message(props: { message: Message | null }) {
   // TODO: Message isRichtext when its needed
-  const [message, setMessage] = useState(props.message);
+  const [dismissed, setDismissed] = useState<Message | null>(null);
   const navigation = useNavigation();
   const location = useLocation();
   const isHydrated = useHydrated();
 
+  const message =
+    navigation.state === "idle" && props.message !== dismissed
+      ? props.message
+      : null;
+
   useEffect(() => {
-    if (navigation.state === "idle") {
-      setMessage(props.message);
-      if (props.message === null) {
-        return;
-      }
-      let timeout: NodeJS.Timeout | undefined;
-      if (props.message.delayInMillis !== "persistent") {
-        timeout = setTimeout(() => {
-          setMessage(null);
-        }, props.message.delayInMillis ?? 5000);
-      }
-      return () => {
-        clearTimeout(timeout);
-      };
-    } else {
-      return;
-    }
-  }, [navigation.state, props.message]);
+    if (message === null || message.delayInMillis === "persistent") return;
+
+    const timeout = setTimeout(() => {
+      setDismissed(message);
+    }, message.delayInMillis ?? 5000);
+
+    return () => clearTimeout(timeout);
+  }, [message]);
 
   if (message === null) {
     return null;
@@ -47,7 +42,7 @@ export function Message(props: { message: Message | null }) {
           to={`${location.pathname}${location.search}${location.hash}`}
           onClick={(event) => {
             event.preventDefault();
-            setMessage(null);
+            setDismissed(message);
           }}
           aria-label="Remove message"
           className="absolute top-2 bottom-2 right-4 hover:underline hover:font-semibold"

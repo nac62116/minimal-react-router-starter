@@ -33,7 +33,16 @@ export async function mailer(options: {
   const transporter = createTransport(
     typeof getServerEnv().MAILER_USER === "undefined" ||
       typeof getServerEnv().MAILER_PASS === "undefined"
-      ? { host: MAILER_OPTIONS.host, port: MAILER_OPTIONS.port }
+      ? {
+          host: MAILER_OPTIONS.host,
+          port: MAILER_OPTIONS.port,
+          secure:
+            getServerEnv().NODE_ENV === "production" &&
+            MAILER_OPTIONS.port === 465,
+          requireTLS:
+            getServerEnv().NODE_ENV === "production" &&
+            MAILER_OPTIONS.port !== 465,
+        }
       : MAILER_OPTIONS
   );
 
@@ -54,9 +63,9 @@ export async function mailer(options: {
 type StandardMessageContent = {
   headline: string;
   message: string;
-  buttonText: string;
-  buttonUrl: string;
-  greetings: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  greetings?: string;
 };
 
 type TemplatePath =
@@ -74,7 +83,7 @@ export async function getCompiledMailTemplate<T extends TemplatePath>(options: {
   content: TemplateContent<T>;
   type: "text" | "html";
 }) {
-  const { templatePath, content, type = "html" } = options;
+  const { templatePath, content, type } = options;
   const bodyTemplateSource = await fs.readFile(templatePath, {
     encoding: "utf8",
   });
