@@ -206,8 +206,6 @@ export default function Playground() {
           locales={{
             trackerActive: "Matomo tracker is active",
             trackerInactive: "Matomo tracker is inactive",
-            doNotTrackEnabled:
-              "Do Not Track is enabled in your browser, so we respect your privacy and have not activated the Matomo tracker.",
             matomoNotConfigured:
               "Matomo is not configured. Please set the MATOMO_URL and MATOMO_SITE_ID environment variables to enable tracking.",
           }}
