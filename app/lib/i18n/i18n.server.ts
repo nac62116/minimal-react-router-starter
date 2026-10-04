@@ -95,7 +95,7 @@ export async function detectLanguage(request: Request) {
     return lngSearchParam as ArrayElement<typeof SUPPORTED_COOKIE_LANGUAGES>;
   } else {
     const cookieHeader = request.headers.get("Cookie");
-    const cookieLng = (await localeCookie.parse(cookieHeader)) as unknown;
+    const cookieLng = await localeCookie.parse(cookieHeader);
     if (cookieLng === null) {
       const acceptLanguageHeaderLng =
         request.headers.get("Accept-Language") ?? "";
