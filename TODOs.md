@@ -60,3 +60,4 @@ Done:
 - Logging -> GDPR safe, no mail reports, logs are persisted via journald with log retention 30 days and 500mb max size
 - Static assets with nice components (loading, blur behaviour) (image and video)
 - Upgrade all packages to latest
+- Move from eslint to oxlint
