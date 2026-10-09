@@ -1,12 +1,13 @@
 - Conform:
   - zod
-  - utils (useEffect for state sync)
+  - utils (useFormRevalidationAfterSuccess for state sync (post forms that stay on same route), submissionHash for state sync (get forms that stay on same route))
   - Functional components (with prop spreading classname functionality)
     - FileUpload + Server side -> fileTypeFromBlob validation + ImageCropper
     - theme toggle (Optimistic UI + set client side cookie + setTheme via Provider) -> First look at inspiration useTheme (see web-auth or epic-stack)
     - RTE when neccessary
   - Check conforms {...get<>Props()} utils about accessibility coverage
   - Example usage (loader, action -> add csrf and honeypot, default)
+- react-email instead of handlebars
 - Matomo (Server -> Docker?):
   - v1: GDPR compliant
   - v2: Event tracking
