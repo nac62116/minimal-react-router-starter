@@ -1,3 +1,4 @@
+- LanguageSwitch.tsx should be post form with set cookie action
 - Conform:
   - zod
   - utils (useFormRevalidationAfterSuccess for state sync (post forms that stay on same route), submissionHash for state sync (get forms that stay on same route))
