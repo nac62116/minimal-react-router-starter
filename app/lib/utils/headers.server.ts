@@ -14,12 +14,13 @@ export function combineHeaders(
 // Add more if needed
 type CSPHeaderOptions =
   | "default-src"
-  | "style-src"
   | "style-src-elem"
+  | "font-src"
   | "script-src"
+  | "img-src"
+  | "media-src"
   | "worker-src"
-  | "frame-src"
-  | "object-src"
+  | "connect-src"
   | "form-action"
   | "base-uri"
   | "frame-ancestors"

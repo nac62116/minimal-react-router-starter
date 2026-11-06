@@ -37,9 +37,9 @@ export default function handleRequest(
     "Reporting-Endpoints",
     `csp-endpoint="${getServerEnv().BASE_URL}/csp-reports"`
   );
-  const styleSrc = ["'self'"];
+  const styleSrcElem = ["'self'"];
   if (getServerEnv().NODE_ENV === "development") {
-    styleSrc.push("'unsafe-inline'");
+    styleSrcElem.push("'unsafe-inline'");
   }
   const scriptSrc = ["'self'"];
   const matomoUrl = getServerEnv().MATOMO_URL;
@@ -53,12 +53,14 @@ export default function handleRequest(
     workerSrc.push("blob:");
   }
   const cspHeaderOptions = createCSPHeaderOptions({
-    "default-src": "'self'",
-    "style-src": styleSrc.join(" "),
-    "style-src-elem": styleSrc.join(" "),
+    "default-src": "'none'",
+    "style-src-elem": styleSrcElem.join(" "),
+    "font-src": "'self'",
     "script-src": scriptSrc.join(" "),
+    "img-src": "'self'",
+    "media-src": "'self'",
     "worker-src": workerSrc.join(" "),
-    "object-src": "'none'",
+    "connect-src": "'self'",
     "form-action": "'self'",
     "base-uri": "'none'",
     "frame-ancestors": "'none'",
