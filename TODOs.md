@@ -1,4 +1,4 @@
-- LanguageSwitch.tsx should be post form with set cookie action
+- Responsive image loading via <\source> Elements -> https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/source#using_the_media_attribute_with_picture
 - Conform:
   - zod
   - utils (useFormRevalidationAfterSuccess for state sync (post forms that stay on same route), submissionHash for state sync (get forms that stay on same route))
@@ -13,7 +13,7 @@
   - v1: GDPR compliant
   - v2: Event tracking
 - Server:
-  - Check hard and software
+  - Check hard and software (iptables, fail2ban, log retention, etc...)
   - Test E-Mail over SMTP
   - ...
 - CMS (Buildtime mutations via src file changes (locales, assets, etc...) and github PRs (behind UI))
