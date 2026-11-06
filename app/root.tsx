@@ -22,7 +22,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { getMessage } from "./lib/utils/message.server";
 import { languageModuleMap } from "./lib/i18n/locales/.server";
-import { detectLanguage, localeCookie } from "./lib/i18n/i18n.server";
+import { detectLanguage } from "./lib/i18n/i18n.server";
 import { DEFAULT_LANGUAGE } from "./lib/i18n/i18n.shared";
 import { getEnv } from "./lib/utils/env.server";
 import { useNonce } from "./lib/security/nonce-provider.shared";
@@ -81,9 +81,6 @@ export const loader = async (args: LoaderFunctionArgs) => {
 
   // Language and locales (see lib/i18n/i18n.server.ts, lib/i18n/i18n.shared.ts, lib/i18n/locales/.server/index.ts and the lib/i18n/locales/.server/<lng> folders)
   const language = await detectLanguage(request);
-  const languageCookieHeaders = {
-    "Set-Cookie": await localeCookie.serialize(language),
-  };
   const locales = languageModuleMap[language].root;
 
   // Set message flash cookies to get a one time message on navigation. (see lib/utils/message.server.ts)
@@ -92,7 +89,6 @@ export const loader = async (args: LoaderFunctionArgs) => {
   // Combining all response headers to set them later in one go (see lib/utils/headers.server.ts)
   const combinedHeaders = combineHeaders(
     csrfCookie ? { "set-cookie": csrfCookie } : null,
-    languageCookieHeaders,
     messageHeaders
   );
 

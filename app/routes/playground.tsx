@@ -33,6 +33,7 @@ export const loader = async (args: Route.LoaderArgs) => {
   }
   const language = await detectLanguage(request);
   const locales = languageModuleMap[language].root;
+
   return {
     language,
     locales,

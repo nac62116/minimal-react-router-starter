@@ -7,6 +7,7 @@ export default [
   route("error", "./routes/error.tsx"),
   route("health", "./routes/health.tsx"),
   route("robots.txt", "./routes/robots.tsx"),
+  route("switch-locale", "./routes/switch-locale.ts"),
   // Playground
   route("playground", "./routes/playground.tsx"),
 ] satisfies RouteConfig;

@@ -9,6 +9,7 @@ const schema = z
   .object({
     NODE_ENV: z.enum(["production", "development", "test"] as const),
     BASE_URL: z.string().optional(),
+    PORT: z.string().optional(),
     SYSTEM_MAIL_SENDER: z
       .string()
       .optional()

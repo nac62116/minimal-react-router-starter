@@ -41,6 +41,7 @@ export default function handleRequest(
   if (getServerEnv().NODE_ENV === "development") {
     styleSrcElem.push("'unsafe-inline'");
   }
+  const imgSrc = ["'self'", "data:"];
   const scriptSrc = ["'self'"];
   const matomoUrl = getServerEnv().MATOMO_URL;
   const matomoSiteId = getServerEnv().MATOMO_SITE_ID;
@@ -56,9 +57,9 @@ export default function handleRequest(
     "default-src": "'none'",
     "style-src-elem": styleSrcElem.join(" "),
     "font-src": "'self'",
-    "script-src": scriptSrc.join(" "),
-    "img-src": "'self'",
+    "img-src": imgSrc.join(" "),
     "media-src": "'self'",
+    "script-src": scriptSrc.join(" "),
     "worker-src": workerSrc.join(" "),
     "connect-src": "'self'",
     "form-action": "'self'",

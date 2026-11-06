@@ -1,14 +1,16 @@
-import { Link, useSearchParams } from "react-router";
+import { useFetcher } from "react-router";
 import type { ArrayElement } from "../utils/types.server";
-import { SUPPORTED_COOKIE_LANGUAGES } from "./i18n.shared";
-import { extendSearchParams } from "../utils/search-params.shared";
+import {
+  LANGUAGE_COOKIE_NAME,
+  SUPPORTED_COOKIE_LANGUAGES,
+} from "./i18n.shared";
 
 export function LanguageSwitch(props: {
   currentLanguage: ArrayElement<typeof SUPPORTED_COOKIE_LANGUAGES>;
 }) {
   const { currentLanguage } = props;
 
-  const [searchParams] = useSearchParams();
+  const fetcher = useFetcher();
 
   return (
     <ul>
@@ -20,17 +22,22 @@ export function LanguageSwitch(props: {
             </li>
           ) : (
             <li key={language}>
-              <Link
-                to={`?${extendSearchParams(searchParams, {
-                  addOrReplace: {
-                    lng: language,
-                  },
-                })}`}
+              <fetcher.Form
+                id={`locale-switch-form-${language}`}
+                method="post"
+                action="/switch-locale"
+                hidden
                 preventScrollReset
-                className="hover:underline hover:font-semibold"
+              />
+              <button
+                type="submit"
+                form={`locale-switch-form-${language}`}
+                name={LANGUAGE_COOKIE_NAME}
+                value={language}
+                className="hover:underline hover:font-semibold cursor-pointer"
               >
                 {language.toUpperCase()}
-              </Link>
+              </button>
             </li>
           );
         }
