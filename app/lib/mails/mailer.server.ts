@@ -30,20 +30,24 @@ export async function mailer(options: {
     );
     return;
   }
+  const sslOptions = {
+    secure:
+      getServerEnv().NODE_ENV === "production" && MAILER_OPTIONS.port === 465,
+    requireTLS:
+      getServerEnv().NODE_ENV === "production" && MAILER_OPTIONS.port !== 465,
+  };
   const transporter = createTransport(
     typeof getServerEnv().MAILER_USER === "undefined" ||
       typeof getServerEnv().MAILER_PASS === "undefined"
       ? {
           host: MAILER_OPTIONS.host,
           port: MAILER_OPTIONS.port,
-          secure:
-            getServerEnv().NODE_ENV === "production" &&
-            MAILER_OPTIONS.port === 465,
-          requireTLS:
-            getServerEnv().NODE_ENV === "production" &&
-            MAILER_OPTIONS.port !== 465,
+          ...(getServerEnv().USE_SSL_FOR_MAILING ? sslOptions : {}),
         }
-      : MAILER_OPTIONS
+      : {
+          ...MAILER_OPTIONS,
+          ...(getServerEnv().USE_SSL_FOR_MAILING ? sslOptions : {}),
+        }
   );
 
   await transporter

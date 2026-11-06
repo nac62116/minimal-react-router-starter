@@ -33,6 +33,14 @@ const schema = z
       .string()
       .optional()
       .transform((val) => (val === "" ? undefined : val)),
+    USE_SSL_FOR_MAILING: z
+      .string()
+      .optional()
+      .transform((val) => {
+        if (typeof val === "undefined") return false;
+        if (val === "") return false;
+        return val === "true";
+      }),
     ALLOW_INDEXING: z
       .string()
       .optional()
