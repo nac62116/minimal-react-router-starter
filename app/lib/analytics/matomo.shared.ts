@@ -51,7 +51,7 @@ export function useMatomo(options: {
         });
       }
     } else {
-      console.warn("Matomo initialization skipped. URL or Site ID is missing.");
+      console.log("Matomo initialization skipped. URL or Site ID is missing.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
