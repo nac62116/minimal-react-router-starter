@@ -37,10 +37,11 @@
   - `cp ./.env.example ./.env`
 - Edit .env file
   - Change the BASE_URL (f.e. https://sub.domain.tld)
+  - Change the DOCKER_ENV to "production"
   - Change the SSL_DOCKER_MOUNT to `"/etc/letsencrypt:/etc/letsencrypt:ro"`
   - Add an email for CERTBOT_UPDATES_RECEIVER which will inform you about renewal
   - Change the DOMAIN (f.e. sub.domain.tld)
-  - Change SYSTEM_MAIL_SENDER, MAILER_HOST, MAILER_PORT, MAILER_USER, MAILER_PASS and USE_SSL_FOR_MAILING to fit your actual smtp host or leave it blank if not used (optional)
+  - Change SYSTEM_MAIL_SENDER, MAILER_HOST, MAILER_PORT, MAILER_USER, MAILER_PASS to fit your actual smtp host or leave it blank if not used (optional)
   - Add matomo via MATOMO_URL and MATOMO_SITE_ID if you want (optional)
   - Generate and add your \_SECRETS
 - Run the setup-project-prod command via make

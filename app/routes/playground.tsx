@@ -28,7 +28,10 @@ export const loader = async (args: Route.LoaderArgs) => {
   // url contains normalized url
   // See https://reactrouter.com/upgrading/v7#futurev8_passthroughrequests
   const { request /*, url */ } = args;
-  if (getServerEnv().NODE_ENV === "production") {
+  if (
+    getServerEnv().NODE_ENV === "production" &&
+    getServerEnv().DOCKER_ENV === "production"
+  ) {
     return redirect("/");
   }
   const language = await detectLanguage(request);
@@ -42,7 +45,10 @@ export const loader = async (args: Route.LoaderArgs) => {
 
 export const action = async (args: Route.ActionArgs) => {
   const { request } = args;
-  if (getServerEnv().NODE_ENV === "production") {
+  if (
+    getServerEnv().NODE_ENV === "production" &&
+    getServerEnv().DOCKER_ENV === "production"
+  ) {
     return redirect("/");
   }
   const formData = await request.formData();

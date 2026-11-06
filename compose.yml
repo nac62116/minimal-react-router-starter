@@ -11,6 +11,8 @@ services:
         NODE_VERSION: ${NODE_VERSION}
         APP_NAME: ${APP_NAME}
         BASE_URL: ${BASE_URL}
+        PORT: ${PORT}
+        DOCKER_ENV: ${DOCKER_ENV}
         SYSTEM_MAIL_SENDER: ${SYSTEM_MAIL_SENDER}
         MAILER_HOST: ${MAILER_HOST}
         MAILER_PORT: ${MAILER_PORT}

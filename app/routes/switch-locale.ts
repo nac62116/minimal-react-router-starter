@@ -11,7 +11,6 @@ export async function action(args: ActionFunctionArgs) {
   const { request } = args;
   const formData = await request.formData();
   const language = formData.get(LANGUAGE_COOKIE_NAME);
-  console.log(language);
   invariantResponse(
     language !== null &&
       typeof language === "string" &&

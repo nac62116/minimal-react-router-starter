@@ -6,9 +6,9 @@ export default {
   // Server-side render by default, to enable SPA mode set this to `false`
   ssr: true,
   allowedActionOrigins:
-    typeof process.env.BASE_URL === "undefined" || process.env.BASE_URL === ""
-      ? process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test"
+      ? [`localhost:${process.env.PORT || 3000}`]
+      : process.env.DOCKER_ENV === "development"
         ? ["localhost"]
-        : [`localhost:${process.env.PORT || 3000}`]
-      : [process.env.BASE_URL.replace(/^https?:\/\//, "")],
+        : [process.env.BASE_URL.replace(/^https?:\/\//, "")],
 } satisfies Config;

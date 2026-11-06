@@ -8,7 +8,8 @@ import { z } from "zod";
 const schema = z
   .object({
     NODE_ENV: z.enum(["production", "development", "test"] as const),
-    BASE_URL: z.string().optional(),
+    DOCKER_ENV: z.enum(["production", "development"] as const),
+    BASE_URL: z.string(),
     PORT: z.string().optional(),
     SYSTEM_MAIL_SENDER: z
       .string()
@@ -33,14 +34,6 @@ const schema = z
       .string()
       .optional()
       .transform((val) => (val === "" ? undefined : val)),
-    USE_SSL_FOR_MAILING: z
-      .string()
-      .optional()
-      .transform((val) => {
-        if (typeof val === "undefined") return false;
-        if (val === "") return false;
-        return val === "true";
-      }),
     ALLOW_INDEXING: z
       .string()
       .optional()
@@ -74,38 +67,38 @@ const schema = z
       .min(1)
       .transform((val) => val.split(",")),
   })
-  .transform((env) => {
+  .transform((env, ctx) => {
     let transformed = { ...env };
-    if (typeof env.BASE_URL === "undefined" || env.BASE_URL === "") {
-      if (env.NODE_ENV === "production") {
+    if (env.NODE_ENV === "development" || env.NODE_ENV === "test") {
+      transformed.BASE_URL = `http://localhost:${env.PORT || 3000}`;
+    } else {
+      if (env.DOCKER_ENV === "development") {
         transformed.BASE_URL = "https://localhost";
       } else {
-        transformed.BASE_URL = "http://localhost:3000";
+        if (typeof env.BASE_URL === "undefined" || env.BASE_URL === "") {
+          ctx.addIssue({
+            code: "custom",
+            message: "BASE_URL must be defined in production",
+            path: ["BASE_URL"],
+          });
+          return z.NEVER;
+        }
+        transformed.BASE_URL = env.BASE_URL;
       }
     }
     if (typeof env.MAILER_HOST !== "undefined") {
-      if (
-        env.NODE_ENV === "production" &&
-        (env.MAILER_HOST === "localhost" || env.MAILER_HOST === "127.0.0.1")
-      ) {
-        console.warn(
-          "Note: If below warning was produced while testing docker deployment locally, you can safely ignore it. Your env MAILER_HOST just was switched from localhost to mailpit, to work in docker.\n[warning] react-router-starter:env.server.ts: You are trying to reference your SMTP server via localhost, which is not working inside a docker container. Consider adding your SMTP server to the docker compose service network and referencing it by the service name instead of localhost."
-        );
-        transformed.MAILER_HOST = "mailpit";
-      }
-      if (env.NODE_ENV === "development" && env.MAILER_HOST === "mailpit") {
+      if (env.NODE_ENV === "development" || env.NODE_ENV === "test") {
         transformed.MAILER_HOST = "localhost";
+      } else {
+        if (env.DOCKER_ENV === "development") {
+          transformed.MAILER_HOST = "mailpit";
+        } else {
+          transformed.MAILER_HOST = env.MAILER_HOST;
+        }
       }
     }
     return transformed;
-  })
-  .refine(
-    (env) => typeof env.BASE_URL === "string" && env.BASE_URL.length > 0,
-    {
-      message: "BASE_URL must be a non-empty string after transform",
-      path: ["BASE_URL"],
-    }
-  );
+  });
 
 type ParsedEnv = z.infer<typeof schema> & {
   BASE_URL: string;

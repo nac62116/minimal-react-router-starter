@@ -32,9 +32,13 @@ export async function mailer(options: {
   }
   const sslOptions = {
     secure:
-      getServerEnv().NODE_ENV === "production" && MAILER_OPTIONS.port === 465,
+      getServerEnv().NODE_ENV === "production" &&
+      getServerEnv().DOCKER_ENV === "production" &&
+      MAILER_OPTIONS.port === 465,
     requireTLS:
-      getServerEnv().NODE_ENV === "production" && MAILER_OPTIONS.port !== 465,
+      getServerEnv().NODE_ENV === "production" &&
+      getServerEnv().DOCKER_ENV === "production" &&
+      MAILER_OPTIONS.port !== 465,
   };
   const transporter = createTransport(
     typeof getServerEnv().MAILER_USER === "undefined" ||
@@ -42,11 +46,11 @@ export async function mailer(options: {
       ? {
           host: MAILER_OPTIONS.host,
           port: MAILER_OPTIONS.port,
-          ...(getServerEnv().USE_SSL_FOR_MAILING ? sslOptions : {}),
+          ...sslOptions,
         }
       : {
           ...MAILER_OPTIONS,
-          ...(getServerEnv().USE_SSL_FOR_MAILING ? sslOptions : {}),
+          ...sslOptions,
         }
   );
 
