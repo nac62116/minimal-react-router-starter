@@ -35,6 +35,11 @@ import { combineHeaders } from "./lib/utils/headers.server";
 import { handlePrefetch } from "./lib/utils/prefetch.server";
 import { Message } from "./lib/components/examples/Message";
 import { useEffect } from "react";
+import { safeStringify } from "./lib/utils/json.shared";
+import {
+  ZOD_CONFIG,
+  ZOD_GLOBAL_CONFIG_KEY,
+} from "./lib/utils/zod-config.shared";
 
 export const meta: MetaFunction<typeof loader> = (/*args*/) => {
   // Dynamic meta tags with loader data and parent loader data
@@ -152,11 +157,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="font-sans bg-white dark:bg-gray-950 text-neutral-600 dark:text-neutral-300">
         {children}
         {data !== null ? <Message message={data.message} /> : null}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `globalThis.${ZOD_GLOBAL_CONFIG_KEY} = Object.assign(globalThis.${ZOD_GLOBAL_CONFIG_KEY} ?? {}, ${safeStringify(ZOD_CONFIG)});`,
+          }}
+          suppressHydrationWarning
+        />
         {data !== null ? (
           <script
             nonce={nonce}
             dangerouslySetInnerHTML={{
-              __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+              __html: `window.ENV = ${safeStringify(data.ENV)}`,
             }}
             suppressHydrationWarning
           />

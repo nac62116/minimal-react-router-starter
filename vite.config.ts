@@ -9,5 +9,6 @@ export default defineConfig({
   },
   resolve: {
     tsconfigPaths: true,
+    dedupe: ["zod"],
   },
 });

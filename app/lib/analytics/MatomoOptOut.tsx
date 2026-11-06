@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { safeStringify } from "../utils/json.shared";
 
 export function MatomoOptOut(props: {
   locales: {
@@ -24,7 +25,7 @@ export function MatomoOptOut(props: {
       const formData = new FormData();
       formData.append(
         "error",
-        JSON.stringify(error, Object.getOwnPropertyNames(error))
+        safeStringify(error, Object.getOwnPropertyNames(error))
       );
       void fetch("/error", {
         method: "POST",
@@ -58,7 +59,7 @@ export function MatomoOptOut(props: {
                     const formData = new FormData();
                     formData.append(
                       "error",
-                      JSON.stringify(error, Object.getOwnPropertyNames(error))
+                      safeStringify(error, Object.getOwnPropertyNames(error))
                     );
                     void fetch("/error", {
                       method: "POST",

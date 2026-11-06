@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useFetcher, type useLocation } from "react-router";
+import { safeStringify } from "../utils/json.shared";
 
 // See Matomo client docs: https://developer.matomo.org/guides/tracking-javascript-guide
 
@@ -43,7 +44,7 @@ export function useMatomo(options: {
         const formData = new FormData();
         formData.append(
           "error",
-          JSON.stringify(error, Object.getOwnPropertyNames(error))
+          safeStringify(error, Object.getOwnPropertyNames(error))
         );
         void errorFetcher.submit(formData, {
           method: "post",
@@ -80,7 +81,7 @@ export function useMatomoPageView(options: {
         const formData = new FormData();
         formData.append(
           "error",
-          JSON.stringify(error, Object.getOwnPropertyNames(error))
+          safeStringify(error, Object.getOwnPropertyNames(error))
         );
         void errorFetcher.submit(formData, {
           method: "post",
