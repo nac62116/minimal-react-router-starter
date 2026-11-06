@@ -1,11 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --breakpoint-sm: 600px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1536px;
+  --breakpoint-2xl: 1920px;
 
   --font-sans:
     "Source Sans Pro", ui-sans-serif, system-ui, sans-serif,
