@@ -17,7 +17,41 @@
 ##
 
 # Define request limit
-limit_req_zone $binary_remote_addr zone=mylimit:10m rate=1000r/s;
+limit_req_zone $binary_remote_addr zone=mylimit:10m rate=20r/s;
+
+# Upstream
+upstream react_router_starter {
+	server react-router-service:3000;
+	# keep below the app's idle timeout (Node closes idle connections after 5 s by default)
+	keepalive_timeout 4s;
+}
+ 
+# Catch-all: drop requests for any hostname that is not ours (forged Host header, direct IP access, scanners).
+# Without these, the first server block of each port silently becomes the default server and receives everything.
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	server_tokens off;
+	access_log /var/log/nginx/access.log gdpr_safe;
+
+	# Close the connection without sending a response
+	return 444;
+}
+
+server {
+	listen 443 ssl default_server;
+	listen [::]:443 ssl default_server;
+
+	# Refuse the TLS handshake for unknown/missing SNI (no certificate needed here)
+	ssl_reject_handshake on;
+
+	server_tokens off;
+	access_log /var/log/nginx/access.log gdpr_safe;
+
+	# Valid SNI but forged Host header ends up here too
+	return 444;
+}
 
 # https
 server {
@@ -42,6 +76,7 @@ server {
 	location / {
 		# Apply request limit
 		limit_req zone=mylimit burst=1000 nodelay;
+    limit_req_status 429;
 
 		# Proxying
 		proxy_http_version 1.1;
@@ -50,10 +85,12 @@ server {
 		proxy_set_header Connection $connection_upgrade;
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		# Overwrite instead of append: the client could otherwise inject fake IPs. nginx is the only proxy in front of the app.
+		# (If you ever put a CDN/load balancer in front of nginx, revisit this and use the realip module.)
+		proxy_set_header X-Forwarded-For $remote_addr;
 		proxy_set_header X-Forwarded-Proto $scheme;
 
-		proxy_pass http://react-router-service:3000;
+		proxy_pass http://react_router_starter;
 	}
 
 	# SSL (Certbot -> See Makefile for setup)
@@ -72,9 +109,16 @@ server {
 server {
 	listen 80;
 	listen [::]:80;
+
 	server_name ${DOMAIN};
+
 	# Hide nginx version
   server_tokens off;
 
-	return 301 https://$host$request_uri;
+  # GDPR compliant logging (Scrapping ips)
+  access_log /var/log/nginx/access.log gdpr_safe;
+  # Only log above warn (warn, error, crit, alert, emerg). Silently drop debug, info and notice.
+  error_log /dev/stderr warn;
+
+	return 301 https://${DOMAIN}$request_uri;
 }
