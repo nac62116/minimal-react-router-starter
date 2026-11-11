@@ -24,6 +24,7 @@ upstream react_router_starter {
 	server react-router-service:3000;
 	# keep below the app's idle timeout (Node closes idle connections after 5 s by default)
 	keepalive_timeout 4s;
+  keepalive 16;
 }
  
 # Catch-all: drop requests for any hostname that is not ours (forged Host header, direct IP access, scanners).
